@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920, height=1080">
+<title>AlchemyOS-Forge — ROG Ally Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@300;400;600&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bone: #e8d5b7;
+    --parchment: #c4a67a;
+    --amber: #d4853a;
+    --rust: #8b3a2a;
+    --violet: #2d1b3d;
+    --void: #0d0a12;
+    --flesh: #4a2c3b;
+    --copper-oxide: #3d6b5e;
+    --marrow: #f0e0c8;
+    --rot: #5c1a2e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 1920px; height: 1080px;
+    background: var(--void);
+    font-family: 'Crimson Text', serif;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Amber ember particles */
+  .embers {
+    position: fixed; inset: 0; z-index: 0;
+    pointer-events: none;
+  }
+  .ember {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: var(--amber);
+    border-radius: 50%;
+    opacity: 0;
+    animation: emberFloat linear infinite;
+  }
+  @keyframes emberFloat {
+    0%   { transform: translateY(0) translateX(0); opacity: 0; }
+    10%  { opacity: 0.6; }
+    90%  { opacity: 0.4; }
+    100% { transform: translateY(-1080px) translateX(var(--drift)); opacity: 0; }
+  }
+
+  /* Breathing void pulse */
+  .breath {
+    position: fixed; inset: 0; z-index: 1;
+    background: radial-gradient(ellipse at 50% 50%, rgba(212,133,58,0.03) 0%, transparent 60%);
+    animation: breathPulse 4s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes breathPulse {
+    0%, 100% { opacity: 0.3; }
+    50%      { opacity: 0.8; }
+  }
+
+  /* Main container */
+  .dashboard {
+    position: relative; z-index: 2;
+    width: 100%; height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 120px 1fr 1fr 1fr;
+    gap: 16px;
+    padding: 24px;
+  }
+
+  /* Header */
+  .header {
+    grid-column: 1 / -1;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo {
+    font-family: 'Cinzel', serif;
+    font-size: 42px; font-weight: 700;
+    color: var(--bone);
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    text-shadow: 0 0 40px rgba(212,133,58,0.4), 0 2px 4px rgba(0,0,0,0.8);
+    position: relative;
+  }
+  .logo::after {
+    content: '';
+    position: absolute; bottom: -8px; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--amber), transparent);
+  }
+  .header-right {
+    display: flex; gap: 24px; align-items: center;
+  }
+  .time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px; color: var(--parchment);
+    letter-spacing: 3px;
+  }
+  .mesh-status {
+    font-family: 'Space Mono', monospace;
+    font-size: 14px; color: var(--amber);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .mesh-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--amber);
+    box-shadow: 0 0 8px var(--amber);
+    animation: meshPulse 2s ease-in-out infinite;
+  }
+  @keyframes meshPulse {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.3; }
+  }
+
+  /* Panel base */
+  .panel {
+    background: linear-gradient(145deg, rgba(45,27,61,0.9) 0%, rgba(13,10,18,0.95) 100%);
+    border: 1px solid rgba(196,166,122,0.2);
+    border-radius: 8px;
+    position: relative;
+    padding: 20px;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    transition: border-color 0.3s ease;
+  }
+  .panel:hover {
+    border-color: rgba(212,133,58,0.4);
+  }
+  .panel::before {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: 8px;
+    background: 
+      repeating-linear-gradient(
+        0deg, transparent, transparent 2px,
+        rgba(196,166,122,0.03) 2px, rgba(196,166,122,0.03) 3px
+      );
+    pointer-events: none;
+  }
+  .panel-title {
+    font-family: 'Cinzel', serif;
+    font-size: 14px; font-weight: 600;
+    color: var(--amber);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .panel-title::after {
+    content: '';
+    display: block;
+    width: 40px; height: 1px;
+    background: var(--amber);
+    margin-top: 4px;
+  }
+
+  /* Visualizer panel */
+  .viz-preview {
+    flex: 1;
+    position: relative;
+    background: radial-gradient(ellipse at center, rgba(74,44,59,0.5) 0%, transparent 70%);
+    border: 1px solid rgba(196,166,122,0.1);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .viz-preview .ring {
+    width: 120px; height: 120px;
+    border: 1px solid rgba(212,133,58,0.3);
+    border-radius: 50%;
+    animation: vizSpin 8s linear infinite;
+    position: relative;
+  }
+  .viz-preview .ring:nth-child(2) { 
+    width: 90px; height: 90px; 
+    position: absolute;
+    border-color: rgba(212,133,58,0.2);
+    animation-direction: reverse;
+    animation-duration: 6s;
+  }
+  .viz-preview .ring:nth-child(3) { 
+    width: 150px; height: 150px; 
+    position: absolute;
+    border-color: rgba(212,133,58,0.15);
+    animation-duration: 11s;
+  }
+  .viz-preview .center-dot {
+    width: 6px; height: 6px;
+    background: var(--amber);
+    border-radius: 50%;
+    box-shadow: 0 0 20px var(--amber), 0 0 40px rgba(212,133,58,0.6);
+    position: absolute;
+    animation: dotPulse 1.5s ease-in-out infinite;
+  }
+  @keyframes vizSpin { to { transform: rotate(360deg); } }
+  @keyframes dotPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.8); } }
+  .viz-label {
+    position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+    font-family: 'Space Mono', monospace; font-size: 11px;
+    color: var(--amber); letter-spacing: 2px;
+  }
+
+  /* Sequencer panel */
+  .seq-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 4px;
+    flex: 1;
+  }
+  .seq-cell {
+    background: rgba(45,27,61,0.5);
+    border: 1px solid rgba(196,166,122,0.1);
+    border-radius: 2px;
+    transition: all 0.2s ease;
+  }
+  .seq-cell.active {
+    background: var(--amber);
+    box-shadow: 0 0 8px rgba(212,133,58,0.5);
+  }
+  .seq-cell.accent {
+    background: rgba(212,133,58,0.3);
+  }
+  .seq-bar {
+    display: flex; justify-content: space-between;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: var(--parchment);
+    margin-top: 8px;
+  }
+  .bpm {
+    font-family: 'Space Mono', monospace;
+    font-size: 24px; color: var(--amber);
+    text-align: center;
+    margin: 8px 0;
+    animation: bpmBeat 0.5s ease-in-out infinite;
+  }
+  @keyframes bpmBeat {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.05); color: var(--marrow); }
+  }
+
+  /* Adia panel */
+  .adia-eyes {
+    display: flex; flex-wrap: wrap;
+    justify-content: center; gap: 12px;
+    flex: 1; align-items: center;
+  }
+  .adia-eye {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 50%, 
+      rgba(74,44,59,0.8) 0%,
+      rgba(196,166,122,0.6) 30%,
+      rgba(13,10,18,1) 60%,
+      rgba(212,133,58,0.8) 70%,
+      rgba(45,27,61,1) 100%
+    );
+    border: 1px solid var(--amber);
+    position: relative;
+    animation: eyeBlink 4s ease-in-out infinite;
+  }
+  @keyframes eyeBlink {
+    0%, 45%, 55%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(0.1); }
+  }
+  .adia-eye:nth-child(odd) { animation-delay: 2s; }
+  .adia-status {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: var(--copper-oxide);
+    text-align: center; margin-top: 8px;
+  }
+
+  /* Shader panel */
+  .shader-icons {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    flex: 1; justify-content: center; align-items: center;
+  }
+  .shader-glyph {
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; color: var(--amber);
+    opacity: 0.7;
+    border: 1px solid rgba(196,166,122,0.15);
+    border-radius: 4px;
+  }
+  .shader-count {
+    font-family: 'Space Mono', monospace;
+    font-size: 32px; color: var(--amber);
+    text-align: center;
+  }
+
+  /* Metrics panel */
+  .metric-row {
+    display: flex; align-items: center;
+    margin-bottom: 10px;
+    gap: 12px;
+  }
+  .metric-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: var(--parchment);
+    width: 40px; letter-spacing: 1px;
+  }
+  .metric-bar {
+    flex: 1; height: 8px;
+    background: rgba(45,27,61,0.5);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .metric-fill {
+    height: 100%; border-radius: 4px;
+    transition: width 0.5s ease;
+  }
+  .metric-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; color: var(--parchment);
+    width: 50px; text-align: right;
+  }
+
+  /* Mesh panel */
+  .mesh-spine {
+    flex: 1;
+    display: flex; align-items: center; justify-content: center;
+    gap: 0;
+    position: relative;
+  }
+  .mesh-spine::before {
+    content: '';
+    position: absolute;
+    width: 80%; height: 2px;
+    background: linear-gradient(90deg, 
+      rgba(212,133,58,0.1), rgba(212,133,58,0.3),
+      rgba(212,133,58,0.1));
+  }
+  .mesh-node {
+    width: 40px;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 6px;
+    z-index: 1;
+  }
+  .mesh-node-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--copper-oxide);
+    border: 1px solid var(--amber);
+    box-shadow: 0 0 8px rgba(212,133,58,0.4);
+    animation: meshPulse 2s ease-in-out infinite;
+  }
+  .mesh-node.offline .mesh-node-dot {
+    background: var(--violet);
+    border-color: var(--flesh);
+    box-shadow: none;
+    animation: none;
+  }
+  .mesh-node-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px; color: var(--parchment);
+    letter-spacing: 1px;
+  }
+
+  /* Subtle scanline overlay */
+  .scanlines {
+    position: fixed; inset: 0; z-index: 100;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 3px
+    );
+  }
+
+  /* Health bar */
+  .health-section { flex: 1; display: flex; flex-direction: column; }
+  .health-row { margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<!-- Ember particles -->
+<div class="embers" id="embers"></div>
+
+<!-- Breathing void -->
+<div class="breath"></div>
+
+<!-- Main Dashboard -->
+<div class="dashboard">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">ALCHEMY // OS</div>
+    <div class="header-right">
+      <div class="mesh-status">
+        <div class="mesh-dot"></div>
+        MESH // 4 PEERS
+      </div>
+      <div class="time">23:42:17</div>
+    </div>
+  </div>
+
+  <!-- VISUALIZER -->
+  <div class="panel">
+    <div class="panel-title">Visualizer</div>
+    <div class="viz-preview">
+      <div class="ring"></div>
+      <div class="ring"></div>
+      <div class="ring"></div>
+      <div class="center-dot"></div>
+      <div class="viz-label">MANDALA _4D // 60 FPS</div>
+    </div>
+  </div>
+
+  <!-- SEQUENCER -->
+  <div class="panel">
+    <div class="panel-title">Sequencer</div>
+    <div class="seq-grid" id="seqGrid"></div>
+    <div class="bpm">120</div>
+    <div class="seq-bar">
+      <span>BAR 07/32</span>
+      <span>KICK SN HAT LD BS</span>
+    </div>
+  </div>
+
+  <!-- ADIA -->
+  <div class="panel">
+    <div class="panel-title">Adia Companion</div>
+    <div class="adia-eyes">
+      <div class="adia-eye"></div><div class="adia-eye"></div>
+      <div class="adia-eye"></div><div class="adia-eye"></div>
+      <div class="adia-eye"></div><div class="adia-eye"></div>
+      <div class="adia-eye"></div><div class="adia-eye"></div>
+    </div>
+    <div class="adia-status">&#9679; AWAKE // LLAMA3</div>
+    <div style="font-family:'Crimson Text',serif; color:var(--bone); font-size:13px; margin-top:8px; font-style:italic; text-align:center; opacity:0.7">
+      "Ready when you are, Dru."
+    </div>
+  </div>
+
+  <!-- SHADERS -->
+  <div class="panel">
+    <div class="panel-title">Shader Vault</div>
+    <div class="shader-icons">
+      <div class="shader-glyph">&#9678;</div>
+      <div class="shader-glyph">&#10023;</div>
+      <div class="shader-glyph">&#9688;</div>
+      <div class="shader-glyph">&#9689;</div>
+      <div class="shader-glyph">&#9672;</div>
+      <div class="shader-glyph">&#9731;</div>
+    </div>
+    <div class="shader-count">34</div>
+    <div style="font-family:'Space Mono',monospace; font-size:10px; color:var(--parchment); text-align:center;">
+      GLSL // WGSL // KODELIFE
+    </div>
+  </div>
+
+  <!-- METRICS -->
+  <div class="panel">
+    <div class="panel-title">System Metrics</div>
+    <div class="metric-row">
+      <span class="metric-label">CPU</span>
+      <div class="metric-bar"><div class="metric-fill" style="width:45%;background:linear-gradient(90deg,var(--copper-oxide),var(--amber));"></div></div>
+      <span class="metric-val">45%</span>
+    </div>
+    <div class="metric-row">
+      <span class="metric-label">GPU</span>
+      <div class="metric-bar"><div class="metric-fill" style="width:82%;background:linear-gradient(90deg,var(--amber),var(--rust));"></div></div>
+      <span class="metric-val">82%</span>
+    </div>
+    <div class="metric-row">
+      <span class="metric-label">RAM</span>
+      <div class="metric-bar"><div class="metric-fill" style="width:62%;background:linear-gradient(90deg,var(--copper-oxide),var(--amber));"></div></div>
+      <span class="metric-val">9.9/16</span>
+    </div>
+    <div class="metric-row">
+      <span class="metric-label">TEMP</span>
+      <div class="metric-bar"><div class="metric-fill" style="width:55%;background:linear-gradient(90deg,var(--copper-oxide),var(--amber));"></div></div>
+      <span class="metric-val">62°C</span>
+    </div>
+    <div class="metric-row">
+      <span class="metric-label">FPS</span>
+      <div class="metric-bar"><div class="metric-fill" style="width:100%;background:linear-gradient(90deg,var(--copper-oxide),var(--amber));"></div></div>
+      <span class="metric-val">60</span>
+    </div>
+  </div>
+
+  <!-- MESH PEERS -->
+  <div class="panel">
+    <div class="panel-title">Mesh Spine</div>
+    <div class="mesh-spine">
+      <div class="mesh-node">
+        <div class="mesh-node-dot"></div>
+        <span class="mesh-node-label">ALLY</span>
+      </div>
+      <div class="mesh-node">
+        <div class="mesh-node-dot"></div>
+        <span class="mesh-node-label">MINI</span>
+      </div>
+      <div class="mesh-node offline">
+        <div class="mesh-node-dot"></div>
+        <span class="mesh-node-label">PIXEL</span>
+      </div>
+      <div class="mesh-node">
+        <div class="mesh-node-dot"></div>
+        <span class="mesh-node-label">TAB</span>
+      </div>
+      <div class="mesh-node offline">
+        <div class="mesh-node-dot"></div>
+        <span class="mesh-node-label">NUU</span>
+      </div>
+    </div>
+    <div style="font-family:'Space Mono',monospace; font-size:9px; color:var(--parchment); text-align:center; margin-top:12px;">
+      &#9679; ONLINE &#9679; OFFLINE
+    </div>
+  </div>
+
+</div>
+
+<!-- Scanlines -->
+<div class="scanlines"></div>
+
+<script>
+// Generate ember particles
+const embersContainer = document.getElementById('embers');
+for (let i = 0; i < 80; i++) {
+  const ember = document.createElement('div');
+  ember.className = 'ember';
+  ember.style.left = Math.random() * 100 + '%';
+  ember.style.bottom = '0px';
+  ember.style.setProperty('--drift', (Math.random() - 0.5) * 200 + 'px');
+  ember.style.animationDuration = (6 + Math.random() * 12) + 's';
+  ember.style.animationDelay = Math.random() * 10 + 's';
+  embersContainer.appendChild(ember);
+}
+
+// Generate sequencer grid
+const seqGrid = document.getElementById('seqGrid');
+const pattern = [
+  [1,0,0,0,1,0,0,0],
+  [0,0,1,0,0,0,1,0],
+  [1,1,0,0,1,0,0,0],
+  [0,0,0,1,0,0,1,0],
+];
+for (let row = 0; row < 4; row++) {
+  for (let col = 0; col < 8; col++) {
+    const cell = document.createElement('div');
+    cell.className = 'seq-cell';
+    if (pattern[row][col] === 1) cell.classList.add('active');
+    else if (col === 3 || col === 7) cell.classList.add('accent');
+    seqGrid.appendChild(cell);
+  }
+}
+
+// Update time
+setInterval(() => {
+  const d = new Date();
+  document.querySelector('.time').textContent = 
+    d.getHours().toString().padStart(2,'0') + ':' +
+    d.getMinutes().toString().padStart(2,'0') + ':' +
+    d.getSeconds().toString().padStart(2,'0');
+}, 1000);
+</script>
+</body>
+</html>

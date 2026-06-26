@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=600, height=500">
+<title>AlchemyOS-Deck — Stream Deck Neo</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bone: #e8d5b7; --parchment: #c4a67a; --amber: #d4853a;
+    --rust: #8b3a2a; --violet: #2d1b3d; --void: #0d0a12;
+    --flesh: #4a2c3b; --copper-oxide: #3d6b5e; --marrow: #f0e0c8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 600px; height: 500px;
+    background: var(--void);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 16px;
+    font-family: 'Space Mono', monospace;
+    overflow: hidden;
+  }
+
+  /* Ember particles */
+  .ember {
+    position: fixed; width: 1px; height: 1px;
+    background: var(--amber); border-radius: 50%;
+    opacity: 0;
+    animation: emberFloat linear infinite;
+    pointer-events: none;
+  }
+  @keyframes emberFloat {
+    0% { transform: translateY(0); opacity: 0; }
+    10% { opacity: 0.7; }
+    90% { opacity: 0.3; }
+    100% { transform: translateY(-500px); opacity: 0; }
+  }
+
+  .deck {
+    background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+    border: 3px solid #222;
+    border-radius: 16px;
+    padding: 24px 20px;
+    box-shadow: 0 0 60px rgba(212,133,58,0.08), inset 0 0 30px rgba(0,0,0,0.5);
+    position: relative; z-index: 2;
+  }
+
+  /* LCD Info Bar */
+  .lcd {
+    width: 496px; height: 58px;
+    background: #0a080e;
+    border: 2px solid #1a1520;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    padding: 8px 12px;
+    position: relative;
+    overflow: hidden;
+    display: flex; align-items: center;
+  }
+  .lcd-label {
+    font-family: 'Cinzel', serif;
+    font-size: 16px; font-weight: 600;
+    color: var(--bone);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+  .lcd-hr {
+    flex: 1; height: 1px;
+    background: linear-gradient(90deg, var(--amber), transparent);
+    margin: 0 12px;
+  }
+  .lcd-fft {
+    flex: 2; height: 40px;
+    display: flex; align-items: flex-end;
+    gap: 1px;
+  }
+  .fft-bar {
+    width: 3px;
+    background: linear-gradient(0deg, var(--amber), var(--violet));
+    border-radius: 1px 1px 0 0;
+    animation: fftDance 0.3s ease-in-out infinite alternate;
+  }
+  @keyframes fftDance {
+    from { transform: scaleY(0.6); }
+    to { transform: scaleY(1); }
+  }
+
+  /* Keys */
+  .keys {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .key {
+    width: 96px; height: 96px;
+    background: linear-gradient(145deg, #0f0d15 0%, #080610 100%);
+    border: 1px solid rgba(196,166,122,0.15);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .key:hover {
+    border-color: rgba(212,133,58,0.5);
+    box-shadow: 0 0 12px rgba(212,133,58,0.15);
+  }
+
+  /* Key content - eye */
+  .key-eye {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 50%,
+      rgba(74,44,59,0.8) 0%, rgba(196,166,122,0.4) 30%,
+      rgba(13,10,18,1) 60%, rgba(212,133,58,0.6) 70%, rgba(45,27,61,1) 100%
+    );
+    border: 1px solid rgba(212,133,58,0.4);
+    animation: keyBlink 4s ease-in-out infinite;
+  }
+  .key:nth-child(odd) .key-eye { animation-delay: 2s; }
+  .key:nth-child(3n) .key-eye { animation-delay: 1s; }
+  .key:nth-child(5n) .key-eye { animation-delay: 3s; }
+
+  @keyframes keyBlink {
+    0%, 42%, 58%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(0.15); }
+  }
+
+  /* Key 7 - ASK ADIA */
+  .key.ask-adia {
+    background: linear-gradient(145deg, #1a0f2a 0%, #0d0a12 100%);
+    border-color: rgba(212,133,58,0.3);
+  }
+  .key.ask-adia .key-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px; color: var(--bone);
+    letter-spacing: 2px; text-align: center;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+
+  /* Key label under each key */
+  .key-number {
+    position: absolute; bottom: 4px;
+    font-family: 'Space Mono', monospace;
+    font-size: 8px; color: rgba(196,166,122,0.3);
+    letter-spacing: 1px;
+  }
+
+  /* Mode indicator bar */
+  .mode-bar {
+    display: flex; gap: 6px;
+    margin-top: 16px; justify-content: center;
+  }
+  .mode-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(45,27,61,0.5);
+    border: 1px solid rgba(196,166,122,0.2);
+  }
+  .mode-dot.active {
+    background: var(--amber);
+    border-color: var(--amber);
+    box-shadow: 0 0 6px var(--amber);
+  }
+  .mode-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px; color: var(--parchment);
+    letter-spacing: 2px; text-align: center;
+    margin-top: 8px;
+  }
+
+  /* Heartbeat line */
+  .heartbeat {
+    width: 100px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--amber), transparent);
+    margin: 8px auto 0;
+    animation: beatLine 0.5s ease-in-out infinite;
+  }
+  @keyframes beatLine {
+    0%, 100% { opacity: 0.3; transform: scaleX(0.8); }
+    50% { opacity: 1; transform: scaleX(1); }
+  }
+</style>
+</head>
+<body>
+
+<script>
+for (let i = 0; i < 30; i++) {
+  const e = document.createElement('div');
+  e.className = 'ember';
+  e.style.left = Math.random() * 600 + 'px';
+  e.style.bottom = '0px';
+  e.style.animationDuration = (4 + Math.random() * 8) + 's';
+  e.style.animationDelay = Math.random() * 8 + 's';
+  document.body.appendChild(e);
+}
+</script>
+
+<div class="deck">
+  <!-- LCD Bar -->
+  <div class="lcd">
+    <div class="lcd-label">ALCHEMY</div>
+    <div class="lcd-hr"></div>
+    <div class="lcd-fft" id="fft"></div>
+  </div>
+
+  <script>
+    const fft = document.getElementById('fft');
+    for (let i = 0; i < 80; i++) {
+      const bar = document.createElement('div');
+      bar.className = 'fft-bar';
+      bar.style.height = (15 + Math.sin(i * 0.3) * 12 + Math.random() * 10) + 'px';
+      bar.style.animationDelay = (i * 0.01) + 's';
+      fft.appendChild(bar);
+    }
+  </script>
+
+  <!-- Keys -->
+  <div class="keys">
+    <div class="key"><div class="key-eye"></div><span class="key-number">0</span></div>
+    <div class="key"><div class="key-eye"></div><span class="key-number">1</span></div>
+    <div class="key"><div class="key-eye"></div><span class="key-number">2</span></div>
+    <div class="key"><div class="key-eye"></div><span class="key-number">3</span></div>
+    <div class="key"><div class="key-eye"></div><span class="key-number">4</span></div>
+    <div class="key"><div class="key-eye"></div><span class="key-number">5</span></div>
+    <div class="key"><div class="key-eye"></div><span class="key-number">6</span></div>
+    <div class="key ask-adia">
+      <div class="key-label">ASK<br>ADIA</div>
+      <span class="key-number">7</span>
+    </div>
+  </div>
+
+  <!-- Mode indicator -->
+  <div class="mode-bar">
+    <div class="mode-dot active"></div>
+    <div class="mode-dot"></div>
+    <div class="mode-dot"></div>
+    <div class="mode-dot"></div>
+    <div class="mode-dot"></div>
+  </div>
+  <div class="mode-label">VISUALIZER _DECK &nbsp;//&nbsp; MANDALA_4D</div>
+  <div class="heartbeat"></div>
+</div>
+
+<script>
+// Animate FFT bars
+setInterval(() => {
+  document.querySelectorAll('.fft-bar').forEach((bar, i) => {
+    bar.style.height = (10 + Math.sin(Date.now()/200 + i*0.2) * 15 + Math.random() * 8) + 'px';
+  });
+}, 150);
+
+// Cycle mode dots
+let modeIdx = 0;
+setInterval(() => {
+  document.querySelectorAll('.mode-dot').forEach((d,i) => d.classList.toggle('active', i===modeIdx));
+  modeIdx = (modeIdx + 1) % 5;
+  const modes = ['VISUALIZER','DIAGNOSTICS','AUTOMATION','SEQUENCER','COMPANION'];
+  document.querySelector('.mode-label').innerHTML = 
+    modes[modeIdx] + ' _DECK &nbsp;//&nbsp; ' + ['MANDALA_4D','METRICS','PIPELINE','120 BPM','ADIA CHAT'][modeIdx];
+}, 4000);
+</script>
+</body>
+</html>

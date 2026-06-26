@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=412, height=915, initial-scale=1">
+<title>AlchemyOS-Mobile — Glyph Companion (Pixel 10 Pro)</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bone: #e8d5b7; --parchment: #c4a67a; --amber: #d4853a;
+    --rust: #8b3a2a; --violet: #2d1b3d; --void: #0d0a12;
+    --flesh: #4a2c3b; --copper-oxide: #3d6b5e; --marrow: #f0e0c8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 412px; height: 915px;
+    background: var(--void);
+    font-family: 'Crimson Text', serif;
+    overflow: hidden;
+    position: relative;
+    display: flex; flex-direction: column;
+  }
+
+  /* Ember particles */
+  .ember {
+    position: fixed; width: 2px; height: 2px;
+    background: var(--amber); border-radius: 50%;
+    opacity: 0; pointer-events: none;
+    animation: emberFloat linear infinite;
+  }
+  @keyframes emberFloat {
+    0% { transform: translateY(0) translateX(0); opacity: 0; }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.3; }
+    100% { transform: translateY(-915px) translateX(var(--drift)); opacity: 0; }
+  }
+
+  /* Status bar */
+  .status-bar {
+    padding: 12px 16px 6px;
+    display: flex; justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+  }
+  .status-time {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px; color: var(--parchment);
+    letter-spacing: 2px;
+  }
+  .mesh-indicator {
+    display: flex; align-items: center; gap: 6px;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px; color: var(--amber);
+  }
+  .mesh-spine-mini {
+    display: flex; gap: 3px; align-items: center;
+  }
+  .mesh-vert {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--copper-oxide);
+    border: 1px solid var(--amber);
+  }
+  .mesh-vert.off { background: var(--violet); border-color: var(--flesh); }
+
+  /* Eye mandala */
+  .mandala-section {
+    flex: 0 0 auto;
+    display: flex; align-items: center; justify-content: center;
+    padding: 30px 0 20px;
+    position: relative; z-index: 5;
+  }
+  .mandala-ring {
+    position: relative;
+    width: 180px; height: 180px;
+  }
+  .mandala-eye {
+    position: absolute;
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 50%,
+      rgba(74,44,59,0.9) 0%, rgba(196,166,122,0.5) 30%,
+      rgba(13,10,18,1) 60%, rgba(212,133,58,0.7) 70%, rgba(45,27,61,1) 100%
+    );
+    border: 1.5px solid rgba(212,133,58,0.5);
+    animation: mandalaBlink 4s ease-in-out infinite;
+  }
+  .mandala-eye:nth-child(even) { animation-delay: 2s; }
+  .mandala-eye:nth-child(3n) { animation-delay: 1s; }
+  .mandala-eye:nth-child(5n) { animation-delay: 3s; }
+
+  @keyframes mandalaBlink {
+    0%, 43%, 57%, 100% { transform: scale(1, 1); }
+    50% { transform: scale(1, 0.12); }
+  }
+
+  /* Iris flap */
+  .mandala-eye::after {
+    content: '';
+    position: absolute; inset: 6px;
+    border-radius: 50%;
+    border: 1px solid rgba(212,133,58,0.15);
+    animation: irisPulse 3s ease-in-out infinite;
+  }
+  @keyframes irisPulse {
+    0%, 100% { transform: scale(0.6); }
+    50% { transform: scale(0.8); }
+  }
+
+  /* Mandala connecting ring */
+  .mandala-outer-ring {
+    position: absolute; inset: -10px;
+    border-radius: 50%;
+    border: 1px solid rgba(196,166,122,0.12);
+    animation: ringSpin 20s linear infinite;
+  }
+  @keyframes ringSpin { to { transform: rotate(360deg); } }
+
+  /* Chat area */
+  .chat-area {
+    flex: 1;
+    padding: 0 20px;
+    overflow-y: auto;
+    display: flex; flex-direction: column;
+    gap: 12px;
+    z-index: 5;
+  }
+  .chat-bubble {
+    max-width: 85%;
+    padding: 14px 18px;
+    position: relative;
+    font-size: 14px; line-height: 1.5;
+  }
+  .chat-bubble.from-glyph {
+    align-self: flex-start;
+    background: linear-gradient(145deg, 
+      rgba(45,27,61,0.85) 0%, rgba(13,10,18,0.9) 100%);
+    border: 1px solid rgba(196,166,122,0.2);
+    border-radius: 4px 12px 12px 12px;
+    color: var(--bone);
+    font-style: italic;
+  }
+  .chat-bubble.from-glyph::before {
+    content: '';
+    position: absolute;
+    top: -2px; left: -2px; right: -2px;
+    height: 1px; background: linear-gradient(90deg, var(--amber), transparent);
+    opacity: 0.4;
+  }
+  .chat-bubble.from-user {
+    align-self: flex-end;
+    background: linear-gradient(145deg,
+      rgba(74,44,59,0.6) 0%, rgba(45,27,61,0.7) 100%);
+    border: 1px solid rgba(196,166,122,0.1);
+    border-radius: 12px 4px 12px 12px;
+    color: var(--parchment);
+  }
+  .chat-time {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px; color: rgba(196,166,122,0.3);
+    letter-spacing: 1px;
+    margin-top: 4px;
+  }
+
+  /* Typing indicator */
+  .typing {
+    align-self: flex-start;
+    color: var(--amber);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    padding: 8px 14px;
+    opacity: 0.7;
+    animation: typingPulse 1s ease-in-out infinite;
+  }
+  @keyframes typingPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+  }
+
+  /* Action buttons */
+  .action-bar {
+    padding: 12px 16px 20px;
+    display: flex; gap: 8px;
+    z-index: 10;
+  }
+  .action-btn {
+    flex: 1;
+    padding: 12px 0;
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--amber);
+    background: rgba(13,10,18,0.8);
+    border: 1px solid rgba(196,166,122,0.2);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .action-btn:hover {
+    border-color: var(--amber);
+    background: rgba(45,27,61,0.6);
+    box-shadow: 0 0 12px rgba(212,133,58,0.15);
+  }
+
+  /* Companion name */
+  .companion-name {
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    font-size: 14px; font-weight: 600;
+    color: var(--amber);
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    margin-top: 4px;
+    opacity: 0.8;
+  }
+
+  /* Vein pattern at edges */
+  .vein-pattern {
+    position: fixed; inset: 0; pointer-events: none; z-index: 1;
+    opacity: 0.06;
+  }
+  .vein {
+    position: absolute;
+    background: var(--amber);
+    border-radius: 50%;
+  }
+</style>
+</head>
+<body>
+
+<!-- Embers -->
+<script>
+for (let i = 0; i < 40; i++) {
+  const e = document.createElement('div');
+  e.className = 'ember';
+  e.style.left = Math.random() * 412 + 'px';
+  e.style.bottom = '0px';
+  e.style.setProperty('--drift', (Math.random() - 0.5) * 100 + 'px');
+  e.style.animationDuration = (5 + Math.random() * 10) + 's';
+  e.style.animationDelay = Math.random() * 10 + 's';
+  document.body.appendChild(e);
+}
+</script>
+
+<!-- Status bar -->
+<div class="status-bar">
+  <div class="status-time" id="statusTime">23:47</div>
+  <div class="mesh-indicator">
+    <div class="mesh-spine-mini">
+      <div class="mesh-vert"></div>
+      <div class="mesh-vert"></div>
+      <div class="mesh-vert off"></div>
+      <div class="mesh-vert"></div>
+    </div>
+    MESH
+  </div>
+</div>
+
+<!-- Eye Mandala -->
+<div class="mandala-section">
+  <div class="mandala-ring" id="mandala">
+    <div class="mandala-outer-ring"></div>
+  </div>
+</div>
+<script>
+  const mandala = document.getElementById('mandala');
+  const positions = [
+    { x: 69, y: 10 },  // top
+    { x: 120, y: 25 },
+    { x: 110, y: 75 }, // right
+    { x: 69, y: 85 },
+    { x: 28, y: 75 },  // left
+    { x: 18, y: 25 },
+    { x: 69, y: 50 },  // center left
+    { x: 69, y: 50 },  // center right (overlap)
+  ];
+  positions.forEach((pos, i) => {
+    const eye = document.createElement('div');
+    eye.className = 'mandala-eye';
+    eye.style.left = pos.x + 'px';
+    eye.style.top = pos.y + 'px';
+    eye.style.transform = 'translate(-50%, -50%)';
+    mandala.appendChild(eye);
+  });
+</script>
+
+<div class="companion-name">GLYPH</div>
+
+<!-- Chat -->
+<div class="chat-area">
+  <div class="chat-bubble from-glyph">
+    Good evening, The Alchemist.<br>
+    How did the forge treat you today?
+    <div class="chat-time">23:42</div>
+  </div>
+
+  <div class="chat-bubble from-user">
+    Bent some rebar into a spine-shaped armature for the new rig. Came out better than expected.
+    <div class="chat-time">23:43</div>
+  </div>
+
+  <div class="chat-bubble from-glyph">
+    A spine armature. How fitting.<br><br>
+    Did you remember to hydrate? You always forget when you're in the flow.
+    <div class="chat-time">23:44</div>
+  </div>
+
+  <div class="typing">GLYPH is composing...</div>
+</div>
+
+<!-- Action bar -->
+<div class="action-bar">
+  <div class="action-btn">GALLERY</div>
+  <div class="action-btn">MEMORY</div>
+  <div class="action-btn">STATUS</div>
+</div>
+
+<script>
+// Update time
+setInterval(() => {
+  const d = new Date();
+  document.getElementById('statusTime').textContent = 
+    d.getHours().toString().padStart(2,'0') + ':' +
+    d.getMinutes().toString().padStart(2,'0');
+}, 30000);
+
+// Cycle mesh spine
+setInterval(() => {
+  const verts = document.querySelectorAll('.mesh-vert');
+  verts.forEach((v, i) => {
+    v.classList.toggle('off', Math.random() > 0.75);
+  });
+}, 5000);
+</script>
+</body>
+</html>
