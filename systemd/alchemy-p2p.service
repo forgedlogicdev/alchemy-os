@@ -1,0 +1,12 @@
+[Unit]
+Description=AlchemyOS P2P Mesh Node
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /var/alchemy/p2p/alchemy_p2p.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=default.target

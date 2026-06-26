@@ -1,0 +1,14 @@
+[Unit]
+Description=AlchemyOS Audio FFT Feeder
+After=pipewire.service network.target
+Wants=pipewire.service
+
+[Service]
+Type=simple
+ExecStart=/var/alchemy/audio/audio_feeder.py
+Restart=always
+RestartSec=5
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=default.target

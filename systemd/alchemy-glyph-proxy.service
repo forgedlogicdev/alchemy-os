@@ -1,0 +1,12 @@
+[Unit]
+Description=Glyph DeepSeek Proxy
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /var/alchemy/ai/glyph/glyph_proxy.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,14 @@
+[Unit]
+Description=AlchemyOS Core Engine
+After=alchemy-visualizer.service
+Wants=alchemy-visualizer.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /var/alchemy/engine/alchemy_os.py
+Restart=always
+RestartSec=5
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=default.target

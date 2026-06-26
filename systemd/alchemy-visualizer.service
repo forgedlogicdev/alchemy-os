@@ -1,0 +1,14 @@
+[Unit]
+Description=AlchemyOS Stream Deck Visualizer
+After=alchemy-audio.service
+Wants=alchemy-audio.service
+
+[Service]
+Type=simple
+ExecStart=/var/alchemy/engine/daemon.py
+Restart=always
+RestartSec=3
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=default.target
