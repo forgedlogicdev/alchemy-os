@@ -2,75 +2,85 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=600, height=500">
+<meta name="viewport" content="width=600, height=520">
 <title>AlchemyOS-Deck — Stream Deck Neo</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Space+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=IM+Fell+English+SC&family=Courier+Prime&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bone: #e8d5b7; --parchment: #c4a67a; --amber: #d4853a;
-    --rust: #8b3a2a; --violet: #2d1b3d; --void: #0d0a12;
-    --flesh: #4a2c3b; --copper-oxide: #3d6b5e; --marrow: #f0e0c8;
+    --gold: #c9a84c; --gold-bright: #e8c854; --gold-dim: #8a6d2b;
+    --emerald: #2d6a4f; --purple: #4a0e4e; --crimson: #8b1a1a;
+    --parchment: #f4e4c1; --parchment-dark: #d4c4a0;
+    --ink: #1a1a2e; --charcoal: #2c1810; --silver: #8a9597;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    width: 600px; height: 500px;
-    background: var(--void);
+    width: 600px; height: 520px;
+    background: var(--charcoal);
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    gap: 16px;
-    font-family: 'Space Mono', monospace;
+    gap: 14px;
+    font-family: 'Courier Prime', monospace;
     overflow: hidden;
+    background-image: 
+      repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(139,109,43,0.04) 3px, rgba(139,109,43,0.04) 4px);
   }
 
-  /* Ember particles */
-  .ember {
+  .sparkle {
     position: fixed; width: 1px; height: 1px;
-    background: var(--amber); border-radius: 50%;
-    opacity: 0;
-    animation: emberFloat linear infinite;
-    pointer-events: none;
+    background: var(--gold-bright); border-radius: 50%;
+    pointer-events: none; opacity: 0;
+    animation: sparkleFloat linear infinite;
   }
-  @keyframes emberFloat {
+  @keyframes sparkleFloat {
     0% { transform: translateY(0); opacity: 0; }
     10% { opacity: 0.7; }
-    90% { opacity: 0.3; }
-    100% { transform: translateY(-500px); opacity: 0; }
+    90% { opacity: 0.2; }
+    100% { transform: translateY(-520px); opacity: 0; }
   }
 
   .deck {
-    background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
-    border: 3px solid #222;
-    border-radius: 16px;
-    padding: 24px 20px;
-    box-shadow: 0 0 60px rgba(212,133,58,0.08), inset 0 0 30px rgba(0,0,0,0.5);
+    background: linear-gradient(180deg, #3a2218 0%, #1a0e08 100%);
+    border: 3px solid var(--gold-dim);
+    border-radius: 12px;
+    padding: 20px 18px;
+    box-shadow: 0 0 40px rgba(201,168,76,0.1), inset 0 0 20px rgba(0,0,0,0.4);
     position: relative; z-index: 2;
   }
+  .deck::before {
+    content: ''; position: absolute; inset: 3px; border: 1px solid rgba(201,168,76,0.12); border-radius: 10px; pointer-events: none;
+  }
 
-  /* LCD Info Bar */
+  .deck-frame-top {
+    text-align: center; margin-bottom: 4px;
+    font-family: 'UnifrakturMaguntia', cursive;
+    font-size: 14px; color: var(--gold-dim);
+    letter-spacing: 3px;
+  }
+
+  /* LCD - like a scroll */
   .lcd {
     width: 496px; height: 58px;
-    background: #0a080e;
-    border: 2px solid #1a1520;
-    border-radius: 6px;
-    margin-bottom: 16px;
+    background: var(--parchment);
+    border: 2px solid var(--gold-dim);
+    border-radius: 4px;
+    margin-bottom: 14px;
     padding: 8px 12px;
     position: relative;
     overflow: hidden;
     display: flex; align-items: center;
   }
-  .lcd-label {
-    font-family: 'Cinzel', serif;
-    font-size: 16px; font-weight: 600;
-    color: var(--bone);
-    letter-spacing: 4px;
-    text-transform: uppercase;
+  .lcd::before {
+    content: ''; position: absolute; inset: 3px; border: 1px solid rgba(201,168,76,0.2);
   }
-  .lcd-hr {
-    flex: 1; height: 1px;
-    background: linear-gradient(90deg, var(--amber), transparent);
-    margin: 0 12px;
+  .lcd-label {
+    font-family: 'IM Fell English SC', serif;
+    font-size: 14px; color: var(--ink);
+    letter-spacing: 3px; text-transform: uppercase;
+  }
+  .lcd-element {
+    font-size: 18px; margin: 0 8px; color: var(--ink);
   }
   .lcd-fft {
     flex: 2; height: 40px;
@@ -79,7 +89,7 @@
   }
   .fft-bar {
     width: 3px;
-    background: linear-gradient(0deg, var(--amber), var(--violet));
+    background: linear-gradient(0deg, var(--gold) 0%, var(--crimson) 50%, var(--gold-dim) 100%);
     border-radius: 1px 1px 0 0;
     animation: fftDance 0.3s ease-in-out infinite alternate;
   }
@@ -88,151 +98,130 @@
     to { transform: scaleY(1); }
   }
 
-  /* Keys */
+  /* Keys - like alchemical seals */
   .keys {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(2, 1fr);
-    gap: 12px;
+    gap: 10px;
   }
   .key {
     width: 96px; height: 96px;
-    background: linear-gradient(145deg, #0f0d15 0%, #080610 100%);
-    border: 1px solid rgba(196,166,122,0.15);
+    background: linear-gradient(145deg, #3a2218 0%, #1a0e08 100%);
+    border: 1px solid rgba(201,168,76,0.3);
     border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
     position: relative;
     overflow: hidden;
-    cursor: pointer;
     transition: all 0.15s ease;
   }
+  .key::before {
+    content: ''; position: absolute; inset: 3px; border: 1px solid rgba(201,168,76,0.1); border-radius: 6px;
+  }
   .key:hover {
-    border-color: rgba(212,133,58,0.5);
-    box-shadow: 0 0 12px rgba(212,133,58,0.15);
+    border-color: var(--gold);
+    box-shadow: 0 0 20px rgba(201,168,76,0.25);
   }
 
-  /* Key content - eye */
-  .key-eye {
-    width: 28px; height: 28px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 50% 50%,
-      rgba(74,44,59,0.8) 0%, rgba(196,166,122,0.4) 30%,
-      rgba(13,10,18,1) 60%, rgba(212,133,58,0.6) 70%, rgba(45,27,61,1) 100%
-    );
-    border: 1px solid rgba(212,133,58,0.4);
-    animation: keyBlink 4s ease-in-out infinite;
+  /* Alchemical symbols on keys */
+  .key-symbol {
+    font-size: 36px; color: var(--gold);
+    text-shadow: 0 0 10px rgba(201,168,76,0.4);
+    animation: sealGlow 3s ease-in-out infinite;
+    z-index: 1;
   }
-  .key:nth-child(odd) .key-eye { animation-delay: 2s; }
-  .key:nth-child(3n) .key-eye { animation-delay: 1s; }
-  .key:nth-child(5n) .key-eye { animation-delay: 3s; }
+  @keyframes sealGlow {
+    0%, 100% { text-shadow: 0 0 6px rgba(201,168,76,0.3); }
+    50% { text-shadow: 0 0 16px rgba(201,168,76,0.7); }
+  }
+  .key:nth-child(odd) .key-symbol { animation-delay: 1.5s; }
 
-  @keyframes keyBlink {
-    0%, 42%, 58%, 100% { transform: scaleY(1); }
-    50% { transform: scaleY(0.15); }
+  .key-number {
+    position: absolute; bottom: 4px;
+    font-family: 'Courier Prime', monospace;
+    font-size: 7px; color: rgba(201,168,76,0.3);
+    letter-spacing: 1px;
   }
 
   /* Key 7 - ASK ADIA */
   .key.ask-adia {
-    background: linear-gradient(145deg, #1a0f2a 0%, #0d0a12 100%);
-    border-color: rgba(212,133,58,0.3);
+    border-color: rgba(201,168,76,0.5);
+    background: linear-gradient(145deg, #3a2828 0%, #1a0e08 100%);
   }
   .key.ask-adia .key-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 9px; color: var(--bone);
+    font-family: 'IM Fell English SC', serif;
+    font-size: 9px; color: var(--gold);
     letter-spacing: 2px; text-align: center;
-    text-transform: uppercase;
-    line-height: 1.4;
+    text-transform: uppercase; line-height: 1.4; z-index: 1;
   }
 
-  /* Key label under each key */
-  .key-number {
-    position: absolute; bottom: 4px;
-    font-family: 'Space Mono', monospace;
-    font-size: 8px; color: rgba(196,166,122,0.3);
-    letter-spacing: 1px;
-  }
-
-  /* Mode indicator bar */
+  /* Mode dots - like planetary alignment */
   .mode-bar {
-    display: flex; gap: 6px;
-    margin-top: 16px; justify-content: center;
+    display: flex; gap: 8px;
+    margin-top: 12px; justify-content: center;
+    align-items: center;
   }
   .mode-dot {
-    width: 6px; height: 6px;
+    width: 8px; height: 8px;
     border-radius: 50%;
-    background: rgba(45,27,61,0.5);
-    border: 1px solid rgba(196,166,122,0.2);
+    background: rgba(139,109,43,0.2);
+    border: 1px solid rgba(201,168,76,0.2);
   }
   .mode-dot.active {
-    background: var(--amber);
-    border-color: var(--amber);
-    box-shadow: 0 0 6px var(--amber);
+    background: var(--gold);
+    border-color: var(--gold);
+    box-shadow: 0 0 8px var(--gold);
   }
   .mode-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 8px; color: var(--parchment);
+    font-family: 'Courier Prime', monospace;
+    font-size: 9px; color: var(--parchment-dark);
     letter-spacing: 2px; text-align: center;
-    margin-top: 8px;
+    margin-top: 6px;
   }
 
-  /* Heartbeat line */
-  .heartbeat {
-    width: 100px; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--amber), transparent);
-    margin: 8px auto 0;
-    animation: beatLine 0.5s ease-in-out infinite;
-  }
-  @keyframes beatLine {
-    0%, 100% { opacity: 0.3; transform: scaleX(0.8); }
-    50% { opacity: 1; transform: scaleX(1); }
+  .sundial-line {
+    width: 80px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 6px auto 0;
   }
 </style>
 </head>
 <body>
 
 <script>
-for (let i = 0; i < 30; i++) {
-  const e = document.createElement('div');
-  e.className = 'ember';
-  e.style.left = Math.random() * 600 + 'px';
-  e.style.bottom = '0px';
-  e.style.animationDuration = (4 + Math.random() * 8) + 's';
-  e.style.animationDelay = Math.random() * 8 + 's';
-  document.body.appendChild(e);
+for (let i = 0; i < 20; i++) {
+  const s = document.createElement('div');
+  s.className = 'sparkle';
+  s.style.left = Math.random() * 600 + 'px';
+  s.style.bottom = '0px';
+  s.style.animationDuration = (4 + Math.random() * 8) + 's';
+  s.style.animationDelay = Math.random() * 8 + 's';
+  document.body.appendChild(s);
 }
 </script>
 
 <div class="deck">
-  <!-- LCD Bar -->
+  <div class="deck-frame-top">✧ ALCAHEST ENGINE ✧</div>
+
+  <!-- LCD Bar - The Scroll -->
   <div class="lcd">
-    <div class="lcd-label">ALCHEMY</div>
-    <div class="lcd-hr"></div>
+    <div class="lcd-label">GRIMOIRE</div>
+    <div class="lcd-element">◆</div>
     <div class="lcd-fft" id="fft"></div>
   </div>
 
-  <script>
-    const fft = document.getElementById('fft');
-    for (let i = 0; i < 80; i++) {
-      const bar = document.createElement('div');
-      bar.className = 'fft-bar';
-      bar.style.height = (15 + Math.sin(i * 0.3) * 12 + Math.random() * 10) + 'px';
-      bar.style.animationDelay = (i * 0.01) + 's';
-      fft.appendChild(bar);
-    }
-  </script>
-
-  <!-- Keys -->
+  <!-- Keys - Alchemical Seals -->
   <div class="keys">
-    <div class="key"><div class="key-eye"></div><span class="key-number">0</span></div>
-    <div class="key"><div class="key-eye"></div><span class="key-number">1</span></div>
-    <div class="key"><div class="key-eye"></div><span class="key-number">2</span></div>
-    <div class="key"><div class="key-eye"></div><span class="key-number">3</span></div>
-    <div class="key"><div class="key-eye"></div><span class="key-number">4</span></div>
-    <div class="key"><div class="key-eye"></div><span class="key-number">5</span></div>
-    <div class="key"><div class="key-eye"></div><span class="key-number">6</span></div>
+    <div class="key"><span class="key-symbol">🜂</span><span class="key-number">I</span></div>
+    <div class="key"><span class="key-symbol">🜄</span><span class="key-number">II</span></div>
+    <div class="key"><span class="key-symbol">🜁</span><span class="key-number">III</span></div>
+    <div class="key"><span class="key-symbol">🜃</span><span class="key-number">IV</span></div>
+    <div class="key"><span class="key-symbol">🜍</span><span class="key-number">V</span></div>
+    <div class="key"><span class="key-symbol">🜔</span><span class="key-number">VI</span></div>
+    <div class="key"><span class="key-symbol">🜘</span><span class="key-number">VII</span></div>
     <div class="key ask-adia">
-      <div class="key-label">ASK<br>ADIA</div>
-      <span class="key-number">7</span>
+      <div class="key-label">Ask<br>Adia</div>
+      <span class="key-number">VIII</span>
     </div>
   </div>
 
@@ -244,27 +233,35 @@ for (let i = 0; i < 30; i++) {
     <div class="mode-dot"></div>
     <div class="mode-dot"></div>
   </div>
-  <div class="mode-label">VISUALIZER _DECK &nbsp;//&nbsp; MANDALA_4D</div>
-  <div class="heartbeat"></div>
+  <div class="mode-label">SCRYING MIRROR ◇ MANDALA OF FLAME</div>
+  <div class="sundial-line"></div>
 </div>
 
 <script>
-// Animate FFT bars
+const fft = document.getElementById('fft');
+for (let i = 0; i < 80; i++) {
+  const bar = document.createElement('div');
+  bar.className = 'fft-bar';
+  bar.style.height = (14 + Math.sin(i * 0.4) * 13 + Math.random() * 8) + 'px';
+  bar.style.animationDelay = (i * 0.01) + 's';
+  fft.appendChild(bar);
+}
+
 setInterval(() => {
   document.querySelectorAll('.fft-bar').forEach((bar, i) => {
-    bar.style.height = (10 + Math.sin(Date.now()/200 + i*0.2) * 15 + Math.random() * 8) + 'px';
+    bar.style.height = (8 + Math.sin(Date.now()/200 + i*0.25) * 16 + Math.random() * 6) + 'px';
   });
 }, 150);
 
-// Cycle mode dots
 let modeIdx = 0;
+const stageNames = ['SCRYING MIRROR','APOTHECARY','GREAT WORK','FORMULA','HOMUNCULUS'];
+const detailNames = ['MANDALA OF FLAME','HUMOURS BALANCED','MAGNUM OPUS','120 ♩','ADIA SPEAKS'];
+
 setInterval(() => {
   document.querySelectorAll('.mode-dot').forEach((d,i) => d.classList.toggle('active', i===modeIdx));
+  document.querySelector('.mode-label').innerHTML = stageNames[modeIdx] + ' ◇ ' + detailNames[modeIdx];
   modeIdx = (modeIdx + 1) % 5;
-  const modes = ['VISUALIZER','DIAGNOSTICS','AUTOMATION','SEQUENCER','COMPANION'];
-  document.querySelector('.mode-label').innerHTML = 
-    modes[modeIdx] + ' _DECK &nbsp;//&nbsp; ' + ['MANDALA_4D','METRICS','PIPELINE','120 BPM','ADIA CHAT'][modeIdx];
-}, 4000);
+}, 5000);
 </script>
 </body>
 </html>

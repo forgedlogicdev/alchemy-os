@@ -1,10 +1,10 @@
 # AlchemyOS — Visual Design Language
 
-## Creative Direction: Bio-Mechanical Beksiński
+## Creative Direction: Alchemical Grimoire
 
-Inspired by Zdzisław Beksiński's dystopian surrealism: organic bone-like structures fused with corroded machinery, desolate amber horizons bleeding into deep violet voids, and the sense that the interface itself is alive — a breathing, symbiotic organism wrapped around cold metal.
+Inspired by medieval illuminated manuscripts, alchemical treatises, and the hermetic tradition. The interface is an alchemist's workbench — parchment, gold leaf, crystal, and iron. Potions bubble in glass vessels. Elemental sigils mark the corners. Constellations map the mesh of connected devices. Every screen feels like a page from a grimoire bound in leather and stained with use.
 
-Every AlchemyOS screen should feel like looking through a surgical incision into a living machine.
+The four classical elements (fire, water, air, earth) form the visual grammar: fire for active/processing states, water for audio/data flow, air for network/communication, earth for storage/stability. Gold represents the philosopher's stone — the perfected state, completion, enlightenment.
 
 ---
 
@@ -12,16 +12,19 @@ Every AlchemyOS screen should feel like looking through a surgical incision into
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│  Bone White       #e8d5b7    Primary text, highlights    │
-│  Aged Parchment   #c4a67a    Secondary text, borders     │
-│  Amber Ember      #d4853a    UI accents, active states   │
-│  Burnt Rust       #8b3a2a    Warning, destructive actions│
-│  Deep Violet      #2d1b3d    Panel backgrounds           │
-│  Void Black       #0d0a12    Root background             │
-│  Flesh Undertone  #4a2c3b    Card surfaces, hover states │
-│  Copper Oxide     #3d6b5e    Success, system healthy     │
-│  Bone Marrow      #f0e0c8    Brightest highlight elements│
-│  Rotting Vein     #5c1a2e    Error, critical alerts      │
+│  Gold             #c9a84c    Primary accent, borders     │
+│  Bright Gold      #e8c854    Highlights, active glow    │
+│  Dim Gold         #8a6d2b    Secondary borders, muted   │
+│  Parchment        #f4e4c1    Primary text on dark       │
+│  Dark Parchment   #d4c4a0    Secondary text             │
+│  Emerald          #2d6a4f    Success, vitality, water   │
+│  Bright Emerald   #40916c    Active healthy states      │
+│  Royal Purple     #4a0e4e    Depth, the void, mystery   │
+│  Crimson          #8b1a1a    Warnings, fire, passion    │
+│  Ink Black        #1a1a2e    Text on parchment bg       │
+│  Charcoal         #2c1810    Root background            │
+│  Copper           #b87333    Earth, metrics, warmth     │
+│  Silver           #8a9597    Inactive, muted, air       │
 └──────────────────────────────────────────────────────────┘
 ```
 
@@ -29,227 +32,110 @@ Every AlchemyOS screen should feel like looking through a surgical incision into
 
 | Use | Font | Style |
 |---|---|---|
-| Headers / Titles | **Cinzel** (serif, small caps) | Bone-carved monumental |
-| Body / UI text | **Crimson Text** (serif) | Aged manuscript feel |
-| Code / Terminal | **JetBrains Mono** | Crisp readability in dark |
-| Data / Metrics | **Space Mono** | Cold mechanical precision |
+| Titles / Wordmark | **UnifrakturMaguntia** (blackletter) | Medieval manuscript headers |
+| Panel headings | **IM Fell English SC** (small caps serif) | Engraved stone/wood feel |
+| Body / Chat text | **IM Fell English** (italic serif) | Handwritten journal |
+| Code / Data / Metrics | **Courier Prime** (monospace) | Scribe's ledger |
+
+## Elemental Vocabulary
+
+| Element | Symbol | Color | Domain |
+|---|---|---|---|
+| Fire | 🜂 | Crimson/Gold | CPU, GPU, active processes, heat |
+| Water | 🜄 | Emerald/Blue | Audio flow, FFT, liquid data |
+| Air | 🜁 | Silver/Gray | Network, P2P mesh, communication |
+| Earth | 🜃 | Copper/Green | Storage, disk, persistence |
+| Quintessence | 🜍 | Gold | The OS itself, completion |
+| Vitriol | 🜔 | Purple | Transformation, shader compilation |
+| Amalgam | 🜘 | Mixed | Combined states, crossfades |
 
 ---
 
 ## Device Interfaces
 
-### 1. ROG Ally — AlchemyOS-Forge (1920×1080, 7-inch touch)
+### 1. ROG Ally — AlchemyOS-Forge
 
 **Boot Sequence:**
-Black void. A single amber pulse, slow breathing rhythm. Faint bone-like structures fade in from the edges — ribs and vertebrae forming the AlchemyOS sigil. "ALCHEMYOS" carves itself into view in Cinzel small caps, each letter burning orange then cooling to bone white. A subtle heartbeat thump on the audio.
+Darkness. A single gold spark ignites. The alchemical sigil ⚗ fades in, rotating slowly as gold leaf filigree spreads outward. "Alchemy OS" appears in UnifrakturMaguntia blackletter, each letter burning gold then cooling. The four elemental symbols mark the screen corners. A bell tolls once.
 
 **Dashboard (Home Screen):**
+- **Background:** Dark charcoal with parchment-like fibrous texture. Gold dust motes drift upward like particles in a sunbeam through an apothecary window.
+- **Panels:** Framed like illuminated manuscript pages — double border (gold outer, thin inner), corner brackets. Each has a gold filigree drop cap on the title.
+- **Scrying Mirror (Visualizer):** A circular "mirror" with rotating mandala, alchemical rings, and a glowing center point. Looks like divination.
+- **Formula Scroll (Sequencer):** Grid of squares like alchemical notation. Active beats glow gold. Bars labeled as "phases." BPM shown with a ♩ symbol.
+- **Homunculus (Adia):** A glass flask containing bubbling liquid. Bubbles rise. The liquid sloshes gently. She "lives" in the vessel.
+- **Ingredient Cabinet (Shaders):** Small glass jars with colored liquids and cork stoppers — each representing a shader.
+- **Apothecary Log (Metrics):** Measurements marked with elemental symbols. Progress bars look like filled measuring tubes.
+- **Celestial Constellation (Mesh):** Peers shown as stars (★ aligned, ☆ obscured) connected by a golden constellation line.
 
-```
-┌──────────────────────────────────────────────────────────┐
-│ ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ │
-│ ░░  ╔══════════════╗  ╔══════════════╗  ╔══════════╗ ░░ │
-│ ░░  ║  VISUALIZER  ║  ║   SEQUENCER  ║  ║  ADIA    ║ ░░ │
-│ ░░  ║  ┌─┐ ┌─┐    ║  ║  ■  ▢  ▢  ■  ║  ║  ◉  ◉    ║ ░░ │
-│ ░░  ║  │◉│ │◉│    ║  ║  ▢  ■  ■  ▢  ║  ║  ◉──◉    ║ ░░ │
-│ ░░  ║  └─┘ └─┘    ║  ║  ■  ■  ▢  ■  ║  ║  ◉  ◉    ║ ░░ │
-│ ░░  ║    ACTIVE   ║  ║    120 BPM   ║  ║  AWAKE    ║ ░░ │
-│ ░░  ╚══════════════╝  ╚══════════════╝  ╚══════════╝ ░░ │
-│ ░░                                                        │
-│ ░░  ╔══════════════╗  ╔══════════════╗  ╔══════════╗ ░░ │
-│ ░░  ║   SHADERS    ║  ║   METRICS    ║  ║   MESH    ║ ░░ │
-│ ░░  ║  ⟐  ✧  ◈   ║  ║ CPU ████░░  ║  ║ ALLY  ●   ║ ░░ │
-│ ░░  ║  ◈  ⟐  ✧   ║  ║ GPU ██████  ║  ║ MINI  ●   ║ ░░ │
-│ ░░  ║  ✧  ◈  ⟐   ║  ║ RAM ███░░░  ║  ║ PIXEL ○   ║ ░░ │
-│ ░░  ║  34 SHADERS  ║  ║  TEMP 62°C  ║  ║ TAB   ●   ║ ░░ │
-│ ░░  ╚══════════════╝  ╚══════════════╝  ╚══════════╝ ░░ │
-│ ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ │
-└──────────────────────────────────────────────────────────┘
-```
+### 2. Stream Deck Neo — AlchemyOS-Deck
 
-**Key visual elements:**
-- All panels are organic rectangles with subtly curved/eroded corners, as if grown rather than drawn
-- Panel borders are bone-like — thin lines that branch and split like capillaries
-- Background is a slowly breathing void with faint amber particles drifting upward like embers
-- Each panel has a subtle inner shadow that makes it feel recessed into flesh
-- The mesh indicator (bottom right) shows connected peers as pulsing vertebrae nodes on a spine-like diagram
-- Active states glow amber; inactive states are muted violet
-- Touch targets have a subtle ripple that looks like blood dispersing in water
+**Keys:** Each key is an alchemical seal — the symbol for an element or compound rendered in gold on dark background. Glow intensifies on press. Key VII always reads "Ask Adia" in small caps.
 
-**Visualizer Mode (fullscreen):**
-The 3D visualizer fills the screen behind semi-transparent Beksiński-inspired UI elements. Control strips at bottom edge are bone fragments — thin, jagged, with amber runes indicating parameters. FFT waveform is drawn as a twitching nerve fiber across the bottom. Crossfader is a vertebrae slider.
+**LCD Bar:** Rendered as a parchment scroll. FFT spectrum drawn as vertical ink strokes. Mode name in IM Fell English SC.
 
-**Adia Companion Mode:**
-Adia's 8 eyes appear arranged in a circular mandala. Each eye has a human iris but surrounded by mechanical aperture blades. When she speaks, her "mouth" is a sine-wave incision across the bottom of the eye cluster. Her chat responses appear in parchment-colored boxes with burnt edges.
+**Mode Switcher:** Planetary alignment dots at bottom — gold dot indicates current mode. Labels use alchemical stage names (Scrying Mirror, Apothecary, Great Work, Formula, Homunculus).
 
----
+### 3. Pixel 10 Pro — AlchemyOS-Mobile
 
-### 2. Stream Deck Neo — AlchemyOS-Deck (8×96×96px keys + 248×58 LCD)
+**Glyph Companion:**
+- **Header:** Time in Courier Prime, mesh peers as star constellation mini-map.
+- **Crystal Ball:** A glowing orb containing Glyph's 8 eyes, arranged in a circular mandala within the crystal. The crystal floats gently with a subtle magnetic bob.
+- **Name:** "Glyph" rendered in UnifrakturMaguntia blackletter beneath the crystal.
+- **Chat bubbles:** Glyph's messages have illuminated drop caps (the first letter in gold blackletter). Parchment-toned backgrounds with gold borders. User messages are darker, more muted.
+- **Typing indicator:** "⚗ Glyph distills a response..."
+- **Action buttons:** Three sealed scrolls — Gallery, Grimoire, Humours. Gold text on dark, with double-border treatment.
+- **Elemental corners:** The four elemental symbols mark the screen edges at low opacity.
 
-**Idle State (no mode active):**
-All 8 keys display faint amber pulsing eyes in darkness. The LCD screen shows "ALCHEMYOS" in Cinzel small caps with a slow heartbeat line underneath.
+### 4. HP Mini — AlchemyOS-Node (web dashboard)
 
-**Visualizer Mode:**
-- Keys 0-7: Each shows a live 96×96 thumbnail of a visual generator. Framed in thin bone-white borders that respond to audio — borders pulse/thicken with the beat.
-- LCD: Horizontal FFT spectrum rendered as 248 vertical bone-spike columns, amber at the bottom fading to violet at the tips.
-
-**Sequencer Mode:**
-- Keys: 4×2 grid of amber step indicators. Active steps glow bright amber, inactive are dim violet dots. Current step has a rotating mandala ring.
-- LCD: 32-bar progress as a spine with vertebrae. Current bar highlighted amber. BPM shown as a beating amber heart icon.
-
-**Metrics Mode:**
-- Keys: CPU (brain-like wireframe), RAM (stacked bone plates), Temp (thermometer vein), Disk (spine segments), Network (neuron branches), Audio (cochlea spiral), Battery (amber fluid level), FPS (flickering flame).
-- LCD: Full status readout in JetBrains Mono, amber on void black.
-
-**Adia Mode:**
-- Keys 0-6: Her eyes in different states (open, half-lidded, closed, blinking, excited, curious, asleep).
-- Key 7: Always labeled "ASK ADIA" in bone white on deep violet.
-- LCD: Her last message scrolls horizontally in Crimson Text, with a subtle sine wave underneath when she's "speaking."
-
----
-
-### 3. Pixel 10 Pro — AlchemyOS-Mobile (2400×1080)
-
-**Glyph Companion Screen:**
-
-```
-┌──────────────────────────────┐
-│ ░░░░░░░░░░░░░░░░░░░░░░░░░░░ │ <- amber ember particles
-│                              │
-│      ◉  ◉  ◉  ◉  ◉  ◉      │
-│         ◉      ◉            │ <- Glyph's 8 eyes
-│      ◉  ◉  ◉  ◉  ◉  ◉      │    (animated mandala)
-│                              │
-│  ┌────────────────────────┐ │
-│  │  "Good evening, Dru.   │ │ <- Chat bubble with
-│  │  How did the welding   │ │    burnt parchment edges
-│  │  go today?"            │ │
-│  └────────────────────────┘ │
-│                              │
-│  ┌────────────────────────┐ │
-│  │        [GALLERY]       │ │ <- Amber-bordered buttons
-│  │  [MEMORY]   [STATUS]   │ │    with bone texture
-│  └────────────────────────┘ │
-└──────────────────────────────┘
-```
-
-- Dark void background with slow amber particle drift
-- Glyph's eye mandala at center top — eyes animate independently, mechanical aperture irises contract/dilate
-- Chat bubbles: parchment texture, burnt/charred edges, serif font
-- Buttons: raised bone-like surface, engraved labels
-- Status bar at top: Mesh connection spine with amber nodes for each connected peer
-- Pull-to-refresh: the mandala eyes all close and reopen
-
-**FlyCode Screen:**
-- Code editor in JetBrains Mono on void black
-- Line numbers are amber
-- Active line has a subtle amber glow behind it
-- AI responses appear in parchment-toned panels from the bottom
-- The opencode server connection indicator is a pulsing neuron at top right
-
----
-
-### 4. HP Mini — AlchemyOS-Node (Headless, via Web Dashboard)
-
-**Status Dashboard (browser-based, 800×480):**
-
-```
-┌────────────────────────────────────────────────────────┐
-│  ALCHEMYOS NODE    ░░░░░░░░░░░░░░      ◉ CONNECTED    │
-│  HP MINI           amber particles                     │
-├────────────────────────────────────────────────────────┤
-│                                                        │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐ │
-│  │   OLLAMA     │  │ STABLE DIFF  │  │  GLYPH PROXY │ │
-│  │   ◉ ACTIVE   │  │   ◉ IDLE    │  │  ◉ STREAMING │ │
-│  │ llama3:8b    │  │ v1.5 loaded  │  │ 3 req/min    │ │
-│  │ 2.3GB VRAM   │  │              │  │              │ │
-│  └──────────────┘  └──────────────┘  └──────────────┘ │
-│                                                        │
-│  ═════════════════ SPINE STATUS ═══════════════════   │
-│  ◉─────◉─────○─────◉─────◉                           │
-│  ALLY  MINI  PIXEL  TAB   NUU                          │
-│                                                        │
-│  ┌──────────────────────────────────────────────────┐ │
-│  │ CPU  ████████░░ 45%   TEMP  62°C                 │ │
-│  │ RAM  ██████░░░░ 58%   DISK  23%                  │ │
-│  │ NET  ██████████ ██     UPTIME  14d 6h            │ │
-│  └──────────────────────────────────────────────────┘ │
-└────────────────────────────────────────────────────────┘
-```
-
-- All panels bordered with branching bone-like lines
-- Service statuses show as mechanical irises: open amber = active, closed violet = stopped
-- The spine diagram shows all mesh peers as vertebrae on a spinal cord
-- Metrics use amber-to-violet gradient bars
-- Background: dark void with occasional ember drift
-
----
+**Status Page:**
+- Service status cards as alchemical apparatus — Ollama as a crucible, Stable Diffusion as a scrying mirror, Proxy as a distillation coil.
+- Mesh status as a celestial chart with star nodes.
+- Metrics as apothecary measurements with elemental symbols.
+- Background: parchment-textured dark with gold dust.
 
 ### 5. MediaTab 3 — AlchemyOS-View
 
-**AllyDroid Launcher (home screen):**
-
-A darkened version of the existing AllyDroid glassmorphism design, but with Beksiński elements:
-- Background: void black with subtle amber ember particles
-- App icons: bone-white glyphs on black, surrounded by thin mechanical aperture rings
-- VNC viewer launches into a darkened overlay with throat-like screen bezel — as if looking through a wound into the Ally's display
-- Connection indicator: a spine of amber nodes, each node a peer, pulsating with connection health
-
----
+**AllyDroid Launcher:** Existing Android launcher restyled with alchemical theming — gold accents, parchment tones, constellation mesh indicator, elemental corner sigils.
 
 ### 6. Nuu+ — AlchemyOS-Lite
 
-**Cyber Monitor (96×64 tiny display):**
-
-```
-┌──────────────────────────────┐
-│  ◉ ALLY  62°C  ████░░       │
-│  ◉ MINI  OK    ██████       │
-│  ○ PIXEL AWAY  ░░░░░░       │
-│  ◉ TAB   OK    ███░░░       │
-│                              │
-│  ░░░░░░░░░░░░░░░░░░░░░░░░   │
-└──────────────────────────────┘
-```
-
-Minimal — just mesh peer status as a vertical spine of amber nodes, and a horizontal FFT bar. No decoration, pure function. The "AlchemyOS" wordmark appears briefly at boot then fades.
+Minimal — constellation of peer stars with elemental status glyphs. Pure function.
 
 ---
 
-## Motion Design Principles
+## Motion Design
 
 | Element | Behavior |
 |---|---|
-| **Background void** | Slow drift of amber ember particles (0.5px/s upward), subtle breathing pulse (4s cycle, ±2% opacity) |
-| **Panel borders** | Capillary branches grow subtly when panel is focused |
-| **Buttons** | On press: surface depresses inward (2px), brief amber flash, then returns with a subtle "flesh settling" rebound |
-| **Transitions** | Screen changes dissolve through a brief amber flash, like an eye blinking |
-| **Notifications** | Appear as if cut into the screen — a thin amber incision opens, message slides in, incision heals closed |
-| **FFT/audio** | Waveforms render as twitching nerve fibers, not clean lines |
-| **Loading** | A mechanical iris slowly opens, revealing the content behind |
-| **Error states** | Screen edges darken with vein-like rot spreading inward from corners |
-| **Success states** | A brief copper oxide bloom radiates from the affected element |
+| **Gold dust** | Slow upward drift, 20-50 particles, bright gold, slight horizontal wander |
+| **Crystal ball (Glyph)** | Gentle magnetic float (±6px, 4s cycle) |
+| **Flask (Adia)** | Bubbles rise and pop, liquid sloshes with subtle surface tension |
+| **Panel borders** | Gold filigree subtly brightens on hover/focus |
+| **Transitions** | Page dissolves through gold wash, like turning a vellum page |
+| **Notifications** | A rolled scroll unfurls from top edge with a soft parchment sound |
+| **Loading** | An alembic fills drop by drop with golden liquid |
+| **Errors** | Ink spills and spreads from the affected element |
+| **Success** | Gold leaf blooms outward from the completed action |
 
----
-
-## Sound Design (bonus)
+## Sound Design
 
 | Event | Sound |
 |---|---|
-| Boot complete | Low sub-bass thump + metallic resonance decay (like a tuning fork struck on bone) |
-| Mode switch | Mechanical aperture click + soft amber chime |
-| Adia speaks | Whispered undertone mixed with subtle sine wave |
-| Error | Distant, muffled impact (like something heavy falling in another room) |
-| Mesh peer connects | Soft vertebrae click — like bones realigning |
-| Button press | Muted tactile thud — flesh on metal |
+| Boot | Cathedral bell toll + parchment rustle |
+| Mode switch | Glass vial clink |
+| Adia speaks | Liquid burble + whispered words |
+| Error | Ink brush stroke — sharp, short |
+| Mesh peer connects | Star chime — soft, crystalline |
+| Button press | Wax seal stamp — dull thud |
 
 ---
 
-## Implementation Notes
+## Implementation
 
-- All UI built with PyQt5 on Ally, Compose on Android, HTML/CSS on web dashboards
-- Color palette defined as CSS custom properties / PyQt stylesheet variables for consistency
-- Amber ember particle effect: lightweight Canvas/WebGL overlay (or QPainter on Qt)
-- All fonts available as open source (Cinzel, Crimson Text, JetBrains Mono, Space Mono via Google Fonts)
-- Dark theme is the only theme — no light mode. AlchemyOS is a creature of the void.
+- All color values defined as CSS custom properties / PyQt stylesheet variables
+- Fonts: UnifrakturMaguntia, IM Fell English (SC), Courier Prime — all open source via Google Fonts
+- Gold dust particle effect: lightweight canvas overlay
+- Alchemical symbol rendering: Unicode characters (U+1F702-U+1F718 range), fallback to SVG for custom sigils
+- Dark parchment theme only — AlchemyOS is a medieval workbench, not a modern OS

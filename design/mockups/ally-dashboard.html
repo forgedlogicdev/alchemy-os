@@ -4,61 +4,71 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=1920, height=1080">
 <title>AlchemyOS-Forge — ROG Ally Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@300;400;600&family=Space+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Sorts+Mill+Goudy:ital@0;1&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bone: #e8d5b7;
-    --parchment: #c4a67a;
-    --amber: #d4853a;
-    --rust: #8b3a2a;
-    --violet: #2d1b3d;
-    --void: #0d0a12;
-    --flesh: #4a2c3b;
-    --copper-oxide: #3d6b5e;
-    --marrow: #f0e0c8;
-    --rot: #5c1a2e;
+    --gold: #c9a84c;
+    --gold-bright: #e8c854;
+    --gold-dim: #8a6d2b;
+    --emerald: #2d6a4f;
+    --emerald-bright: #40916c;
+    --purple: #4a0e4e;
+    --crimson: #8b1a1a;
+    --crimson-bright: #b22222;
+    --parchment: #f4e4c1;
+    --parchment-dark: #d4c4a0;
+    --parchment-darker: #b8a080;
+    --ink: #1a1a2e;
+    --ink-light: #2a2a3e;
+    --sepia: #704214;
+    --copper: #b87333;
+    --silver: #8a9597;
+    --charcoal: #2c1810;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
     width: 1920px; height: 1080px;
-    background: var(--void);
-    font-family: 'Crimson Text', serif;
+    background: var(--charcoal);
+    font-family: 'IM Fell English', serif;
     overflow: hidden;
     position: relative;
+    color: var(--ink);
   }
 
-  /* Amber ember particles */
-  .embers {
+  /* Parchment texture background */
+  .parchment-bg {
     position: fixed; inset: 0; z-index: 0;
-    pointer-events: none;
+    background: 
+      radial-gradient(ellipse at 30% 20%, rgba(244,228,193,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 80%, rgba(201,168,76,0.08) 0%, transparent 50%),
+      linear-gradient(180deg, var(--charcoal) 0%, #3a2218 50%, var(--charcoal) 100%);
   }
-  .ember {
-    position: absolute;
-    width: 2px; height: 2px;
-    background: var(--amber);
-    border-radius: 50%;
-    opacity: 0;
-    animation: emberFloat linear infinite;
-  }
-  @keyframes emberFloat {
-    0%   { transform: translateY(0) translateX(0); opacity: 0; }
-    10%  { opacity: 0.6; }
-    90%  { opacity: 0.4; }
-    100% { transform: translateY(-1080px) translateX(var(--drift)); opacity: 0; }
+  .parchment-bg::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: 
+      repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(139,109,43,0.03) 3px, rgba(139,109,43,0.03) 4px),
+      repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(139,109,43,0.03) 3px, rgba(139,109,43,0.03) 4px);
   }
 
-  /* Breathing void pulse */
-  .breath {
-    position: fixed; inset: 0; z-index: 1;
-    background: radial-gradient(ellipse at 50% 50%, rgba(212,133,58,0.03) 0%, transparent 60%);
-    animation: breathPulse 4s ease-in-out infinite;
+  /* Floating dust motes (gold sparkles) */
+  .sparkle {
+    position: fixed;
+    width: 2px; height: 2px;
+    background: var(--gold-bright);
+    border-radius: 50%;
     pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    animation: sparkleFloat linear infinite;
   }
-  @keyframes breathPulse {
-    0%, 100% { opacity: 0.3; }
-    50%      { opacity: 0.8; }
+  @keyframes sparkleFloat {
+    0%   { transform: translateY(0) translateX(0); opacity: 0; }
+    10%  { opacity: 0.8; }
+    90%  { opacity: 0.3; }
+    100% { transform: translateY(-1080px) translateX(var(--drift)); opacity: 0; }
   }
 
   /* Main container */
@@ -67,493 +77,530 @@
     width: 100%; height: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 120px 1fr 1fr 1fr;
-    gap: 16px;
-    padding: 24px;
+    grid-template-rows: 130px 1fr 1fr 1fr;
+    gap: 18px;
+    padding: 28px;
   }
 
   /* Header */
   .header {
     grid-column: 1 / -1;
     display: flex; align-items: center; justify-content: space-between;
-  }
-  .logo {
-    font-family: 'Cinzel', serif;
-    font-size: 42px; font-weight: 700;
-    color: var(--bone);
-    letter-spacing: 8px;
-    text-transform: uppercase;
-    text-shadow: 0 0 40px rgba(212,133,58,0.4), 0 2px 4px rgba(0,0,0,0.8);
     position: relative;
   }
-  .logo::after {
+  .header::after {
     content: '';
-    position: absolute; bottom: -8px; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--amber), transparent);
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
   }
-  .header-right {
-    display: flex; gap: 24px; align-items: center;
+  .logo-area {
+    display: flex; align-items: center; gap: 16px;
   }
-  .time {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 18px; color: var(--parchment);
+  .alchemy-sigil {
+    width: 56px; height: 56px;
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .alchemy-sigil::before {
+    content: '⚗';
+    font-size: 28px; color: var(--gold);
+    animation: sigilGlow 3s ease-in-out infinite;
+  }
+  @keyframes sigilGlow {
+    0%, 100% { text-shadow: 0 0 8px var(--gold), 0 0 20px rgba(201,168,76,0.4); }
+    50% { text-shadow: 0 0 20px var(--gold-bright), 0 0 40px rgba(201,168,76,0.6); }
+  }
+  .sigil-outer {
+    position: absolute; inset: -6px; border-radius: 50%;
+    border: 1px solid rgba(201,168,76,0.3);
+    animation: sigilOrbit 8s linear infinite;
+  }
+  @keyframes sigilOrbit {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.08); }
+    100% { transform: rotate(360deg) scale(1); }
+  }
+  .logo-text {
+    font-family: 'UnifrakturMaguntia', cursive;
+    font-size: 48px; color: var(--gold);
+    text-shadow: 0 0 30px rgba(201,168,76,0.3), 0 2px 4px rgba(0,0,0,0.6);
     letter-spacing: 3px;
   }
-  .mesh-status {
-    font-family: 'Space Mono', monospace;
-    font-size: 14px; color: var(--amber);
-    display: flex; align-items: center; gap: 8px;
+  .header-right {
+    display: flex; gap: 20px; align-items: center;
   }
-  .mesh-dot {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    background: var(--amber);
-    box-shadow: 0 0 8px var(--amber);
-    animation: meshPulse 2s ease-in-out infinite;
+  .phase-moon {
+    font-size: 28px; color: var(--silver);
+    text-shadow: 0 0 10px rgba(138,149,151,0.4);
   }
-  @keyframes meshPulse {
-    0%, 100% { opacity: 1; }
-    50%      { opacity: 0.3; }
+  .time {
+    font-family: 'Courier Prime', monospace;
+    font-size: 18px; color: var(--parchment-dark);
+    letter-spacing: 3px;
   }
 
-  /* Panel base */
+  /* Panel base - like an illuminated manuscript page */
   .panel {
-    background: linear-gradient(145deg, rgba(45,27,61,0.9) 0%, rgba(13,10,18,0.95) 100%);
-    border: 1px solid rgba(196,166,122,0.2);
-    border-radius: 8px;
+    background: 
+      linear-gradient(180deg, rgba(44,24,16,0.92) 0%, rgba(58,34,24,0.95) 100%);
+    border: 2px solid var(--gold-dim);
+    border-radius: 4px;
     position: relative;
-    padding: 20px;
+    padding: 22px;
     display: flex; flex-direction: column;
     overflow: hidden;
-    transition: border-color 0.3s ease;
-  }
-  .panel:hover {
-    border-color: rgba(212,133,58,0.4);
   }
   .panel::before {
     content: '';
-    position: absolute; inset: 0;
-    border-radius: 8px;
-    background: 
-      repeating-linear-gradient(
-        0deg, transparent, transparent 2px,
-        rgba(196,166,122,0.03) 2px, rgba(196,166,122,0.03) 3px
-      );
+    position: absolute; inset: 4px;
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 2px;
     pointer-events: none;
   }
+  .panel-corner {
+    position: absolute; width: 16px; height: 16px;
+    border-color: var(--gold);
+    border-style: solid;
+    z-index: 2; pointer-events: none;
+  }
+  .panel-corner.tl { top: 4px; left: 4px; border-width: 2px 0 0 2px; }
+  .panel-corner.tr { top: 4px; right: 4px; border-width: 2px 2px 0 0; }
+  .panel-corner.bl { bottom: 4px; left: 4px; border-width: 0 0 2px 2px; }
+  .panel-corner.br { bottom: 4px; right: 4px; border-width: 0 2px 2px 0; }
+
   .panel-title {
-    font-family: 'Cinzel', serif;
-    font-size: 14px; font-weight: 600;
-    color: var(--amber);
+    font-family: 'IM Fell English SC', serif;
+    font-size: 15px; color: var(--gold);
     letter-spacing: 3px;
     text-transform: uppercase;
-    margin-bottom: 12px;
-    position: relative;
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .panel-title .sigil {
+    font-size: 16px;
   }
   .panel-title::after {
     content: '';
-    display: block;
-    width: 40px; height: 1px;
-    background: var(--amber);
-    margin-top: 4px;
+    flex: 1; height: 1px;
+    background: linear-gradient(90deg, var(--gold-dim), transparent);
   }
 
-  /* Visualizer panel */
+  /* Visualizer panel - like a scrying mirror */
   .viz-preview {
-    flex: 1;
-    position: relative;
-    background: radial-gradient(ellipse at center, rgba(74,44,59,0.5) 0%, transparent 70%);
-    border: 1px solid rgba(196,166,122,0.1);
-    border-radius: 4px;
+    flex: 1; position: relative;
+    background: radial-gradient(ellipse at center, 
+      rgba(74,14,78,0.3) 0%,
+      rgba(44,24,16,0.5) 60%,
+      transparent 100%);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 50%;
+    margin: 0 40px;
     display: flex; align-items: center; justify-content: center;
   }
-  .viz-preview .ring {
-    width: 120px; height: 120px;
-    border: 1px solid rgba(212,133,58,0.3);
+  .viz-mandala {
+    width: 100px; height: 100px;
     border-radius: 50%;
-    animation: vizSpin 8s linear infinite;
+    border: 2px solid var(--gold);
     position: relative;
+    animation: mandalaSpin 12s linear infinite;
   }
-  .viz-preview .ring:nth-child(2) { 
-    width: 90px; height: 90px; 
-    position: absolute;
-    border-color: rgba(212,133,58,0.2);
-    animation-direction: reverse;
-    animation-duration: 6s;
+  .viz-mandala::before {
+    content: '✦';
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 40px; color: var(--gold);
+    text-shadow: 0 0 15px var(--gold);
   }
-  .viz-preview .ring:nth-child(3) { 
-    width: 150px; height: 150px; 
-    position: absolute;
-    border-color: rgba(212,133,58,0.15);
-    animation-duration: 11s;
+  @keyframes mandalaSpin { to { transform: rotate(360deg); } }
+  .viz-ring {
+    position: absolute; border-radius: 50%;
+    border: 1px solid rgba(201,168,76,0.25);
   }
-  .viz-preview .center-dot {
-    width: 6px; height: 6px;
-    background: var(--amber);
-    border-radius: 50%;
-    box-shadow: 0 0 20px var(--amber), 0 0 40px rgba(212,133,58,0.6);
-    position: absolute;
-    animation: dotPulse 1.5s ease-in-out infinite;
-  }
-  @keyframes vizSpin { to { transform: rotate(360deg); } }
-  @keyframes dotPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.8); } }
   .viz-label {
-    position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
-    font-family: 'Space Mono', monospace; font-size: 11px;
-    color: var(--amber); letter-spacing: 2px;
+    position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+    font-family: 'Courier Prime', monospace;
+    font-size: 10px; color: var(--parchment-dark); letter-spacing: 2px;
   }
 
-  /* Sequencer panel */
+  /* Sequencer - like alchemical formula notation */
   .seq-grid {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
-    gap: 4px;
-    flex: 1;
+    gap: 4px; flex: 1;
   }
   .seq-cell {
-    background: rgba(45,27,61,0.5);
-    border: 1px solid rgba(196,166,122,0.1);
+    background: rgba(139,109,43,0.1);
+    border: 1px solid rgba(201,168,76,0.15);
     border-radius: 2px;
     transition: all 0.2s ease;
   }
   .seq-cell.active {
-    background: var(--amber);
-    box-shadow: 0 0 8px rgba(212,133,58,0.5);
+    background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+    box-shadow: 0 0 6px rgba(201,168,76,0.4);
   }
   .seq-cell.accent {
-    background: rgba(212,133,58,0.3);
+    background: rgba(201,168,76,0.12);
   }
   .seq-bar {
     display: flex; justify-content: space-between;
-    font-family: 'Space Mono', monospace;
-    font-size: 11px; color: var(--parchment);
+    font-family: 'Courier Prime', monospace;
+    font-size: 10px; color: var(--parchment-dark);
     margin-top: 8px;
   }
   .bpm {
-    font-family: 'Space Mono', monospace;
-    font-size: 24px; color: var(--amber);
-    text-align: center;
-    margin: 8px 0;
-    animation: bpmBeat 0.5s ease-in-out infinite;
+    font-family: 'Courier Prime', monospace;
+    font-size: 28px; color: var(--gold);
+    text-align: center; margin: 8px 0;
+    text-shadow: 0 0 10px rgba(201,168,76,0.3);
   }
-  @keyframes bpmBeat {
-    0%, 100% { transform: scale(1); }
-    50%      { transform: scale(1.05); color: var(--marrow); }
+  .ingredients {
+    display: flex; gap: 6px; justify-content: center;
+    font-size: 14px;
+    margin-top: 4px;
   }
 
-  /* Adia panel */
-  .adia-eyes {
-    display: flex; flex-wrap: wrap;
-    justify-content: center; gap: 12px;
-    flex: 1; align-items: center;
-  }
-  .adia-eye {
-    width: 28px; height: 28px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 50% 50%, 
-      rgba(74,44,59,0.8) 0%,
-      rgba(196,166,122,0.6) 30%,
-      rgba(13,10,18,1) 60%,
-      rgba(212,133,58,0.8) 70%,
-      rgba(45,27,61,1) 100%
-    );
-    border: 1px solid var(--amber);
+  /* Adia - like a homunculus in a flask */
+  .adia-container {
+    flex: 1; display: flex; align-items: center; justify-content: center;
     position: relative;
-    animation: eyeBlink 4s ease-in-out infinite;
   }
-  @keyframes eyeBlink {
-    0%, 45%, 55%, 100% { transform: scaleY(1); }
-    50% { transform: scaleY(0.1); }
+  .flask {
+    width: 80px; height: 120px;
+    border: 2px solid var(--gold-dim);
+    border-radius: 40px 40px 20px 20px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, 
+      rgba(74,14,78,0.4) 0%,
+      rgba(45,106,79,0.3) 40%,
+      rgba(201,168,76,0.2) 70%,
+      rgba(139,26,26,0.2) 100%);
+    animation: flaskBubble 4s ease-in-out infinite;
   }
-  .adia-eye:nth-child(odd) { animation-delay: 2s; }
+  @keyframes flaskBubble {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+  .flask-liquid {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 60%;
+    background: linear-gradient(180deg, 
+      rgba(212,133,58,0.5) 0%,
+      rgba(139,26,26,0.4) 50%,
+      rgba(74,14,78,0.5) 100%);
+    animation: liquidSlosh 3s ease-in-out infinite;
+  }
+  @keyframes liquidSlosh {
+    0%, 100% { border-radius: 40% 60% 0 0 / 20% 20% 0 0; }
+    50% { border-radius: 60% 40% 0 0 / 15% 20% 0 0; }
+  }
+  .flask-bubble {
+    position: absolute;
+    width: 4px; height: 4px;
+    background: var(--gold-bright);
+    border-radius: 50%;
+    animation: bubbleRise linear infinite;
+    opacity: 0.6;
+  }
+  @keyframes bubbleRise {
+    0% { transform: translateY(0); opacity: 0.6; }
+    100% { transform: translateY(-80px); opacity: 0; }
+  }
   .adia-status {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px; color: var(--copper-oxide);
+    font-family: 'Courier Prime', monospace;
+    font-size: 10px; color: var(--emerald-bright);
     text-align: center; margin-top: 8px;
+    text-shadow: 0 0 6px rgba(64,145,108,0.3);
   }
 
-  /* Shader panel */
-  .shader-icons {
+  /* Shader vault - like a cabinet of ingredients */
+  .ingredient-grid {
     display: flex; flex-wrap: wrap; gap: 8px;
     flex: 1; justify-content: center; align-items: center;
   }
-  .shader-glyph {
-    width: 32px; height: 32px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px; color: var(--amber);
-    opacity: 0.7;
-    border: 1px solid rgba(196,166,122,0.15);
-    border-radius: 4px;
+  .ingredient-jar {
+    width: 34px; height: 50px;
+    border: 1px solid var(--gold-dim);
+    border-radius: 6px 6px 12px 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .jar-liquid {
+    position: absolute; bottom: 0; left: 2px; right: 2px;
+    border-radius: 0 0 10px 10px;
+  }
+  .jar-cork {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 20px; height: 10px;
+    background: var(--parchment-darker);
+    border-radius: 4px 4px 0 0;
   }
   .shader-count {
-    font-family: 'Space Mono', monospace;
-    font-size: 32px; color: var(--amber);
+    font-family: 'Courier Prime', monospace;
+    font-size: 36px; color: var(--gold);
     text-align: center;
+    text-shadow: 0 0 10px rgba(201,168,76,0.3);
   }
 
-  /* Metrics panel */
+  /* Metrics - like an apothecary's measurements */
   .metric-row {
     display: flex; align-items: center;
-    margin-bottom: 10px;
-    gap: 12px;
+    margin-bottom: 10px; gap: 12px;
   }
-  .metric-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px; color: var(--parchment);
-    width: 40px; letter-spacing: 1px;
+  .metric-symbol {
+    font-size: 16px; width: 28px; text-align: center;
   }
   .metric-bar {
-    flex: 1; height: 8px;
-    background: rgba(45,27,61,0.5);
-    border-radius: 4px;
-    overflow: hidden;
+    flex: 1; height: 10px;
+    background: rgba(139,109,43,0.15);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 5px; overflow: hidden;
   }
   .metric-fill {
     height: 100%; border-radius: 4px;
     transition: width 0.5s ease;
   }
   .metric-val {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px; color: var(--parchment);
+    font-family: 'Courier Prime', monospace;
+    font-size: 12px; color: var(--parchment-dark);
     width: 50px; text-align: right;
   }
 
-  /* Mesh panel */
-  .mesh-spine {
-    flex: 1;
-    display: flex; align-items: center; justify-content: center;
-    gap: 0;
+  /* Mesh - like a constellation chart */
+  .constellation {
+    flex: 1; display: flex; align-items: center; justify-content: center;
     position: relative;
   }
-  .mesh-spine::before {
-    content: '';
+  .constellation-line {
     position: absolute;
-    width: 80%; height: 2px;
+    width: 70%; height: 1px;
     background: linear-gradient(90deg, 
-      rgba(212,133,58,0.1), rgba(212,133,58,0.3),
-      rgba(212,133,58,0.1));
+      rgba(201,168,76,0.1), rgba(201,168,76,0.3), rgba(201,168,76,0.1));
   }
-  .mesh-node {
-    width: 40px;
+  .star-node {
     display: flex; flex-direction: column; align-items: center;
-    gap: 6px;
-    z-index: 1;
+    gap: 8px; z-index: 1; width: 50px;
   }
-  .mesh-node-dot {
-    width: 12px; height: 12px;
-    border-radius: 50%;
-    background: var(--copper-oxide);
-    border: 1px solid var(--amber);
-    box-shadow: 0 0 8px rgba(212,133,58,0.4);
-    animation: meshPulse 2s ease-in-out infinite;
+  .star {
+    font-size: 20px; color: var(--gold);
+    text-shadow: 0 0 8px var(--gold);
+    animation: starTwinkle 2s ease-in-out infinite;
   }
-  .mesh-node.offline .mesh-node-dot {
-    background: var(--violet);
-    border-color: var(--flesh);
-    box-shadow: none;
+  .star-node.dim .star {
+    color: var(--gold-dim);
+    text-shadow: none;
     animation: none;
   }
-  .mesh-node-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 9px; color: var(--parchment);
+  @keyframes starTwinkle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+  .star-label {
+    font-family: 'Courier Prime', monospace;
+    font-size: 8px; color: var(--parchment-darker);
     letter-spacing: 1px;
   }
 
-  /* Subtle scanline overlay */
-  .scanlines {
-    position: fixed; inset: 0; z-index: 100;
-    pointer-events: none;
-    background: repeating-linear-gradient(
-      0deg, transparent, transparent 2px,
-      rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 3px
-    );
+  /* Elemental corners */
+  .elemental {
+    position: fixed; z-index: 3; pointer-events: none;
+    font-size: 20px; opacity: 0.15;
   }
-
-  /* Health bar */
-  .health-section { flex: 1; display: flex; flex-direction: column; }
-  .health-row { margin-bottom: 8px; }
+  .elemental.fire { top: 16px; right: 24px; color: #d4853a; animation: fireFlicker 2s ease-in-out infinite; }
+  .elemental.water { bottom: 16px; left: 24px; color: #5b9bd5; animation: waterFlow 3s ease-in-out infinite; }
+  .elemental.earth { bottom: 16px; right: 24px; color: #6b8e23; }
+  .elemental.air { top: 16px; left: 24px; color: #c0c0c0; animation: airGust 4s ease-in-out infinite; }
+  @keyframes fireFlicker { 0%,100%{opacity:0.12} 50%{opacity:0.2} }
+  @keyframes waterFlow { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+  @keyframes airGust { 0%,100%{transform:translateX(0)} 50%{transform:translateX(5px)} }
 </style>
 </head>
 <body>
 
-<!-- Ember particles -->
-<div class="embers" id="embers"></div>
+<div class="parchment-bg"></div>
 
-<!-- Breathing void -->
-<div class="breath"></div>
+<script>
+for (let i = 0; i < 50; i++) {
+  const s = document.createElement('div');
+  s.className = 'sparkle';
+  s.style.left = Math.random() * 1920 + 'px';
+  s.style.bottom = '0px';
+  s.style.setProperty('--drift', (Math.random() - 0.5) * 200 + 'px');
+  s.style.animationDuration = (5 + Math.random() * 12) + 's';
+  s.style.animationDelay = Math.random() * 12 + 's';
+  document.body.appendChild(s);
+}
+</script>
 
-<!-- Main Dashboard -->
+<!-- Elemental markers -->
+<div class="elemental fire">🜂</div>
+<div class="elemental water">🜄</div>
+<div class="elemental earth">🜃</div>
+<div class="elemental air">🜁</div>
+
 <div class="dashboard">
-
   <!-- HEADER -->
   <div class="header">
-    <div class="logo">ALCHEMY // OS</div>
-    <div class="header-right">
-      <div class="mesh-status">
-        <div class="mesh-dot"></div>
-        MESH // 4 PEERS
+    <div class="logo-area">
+      <div class="alchemy-sigil">
+        <div class="sigil-outer"></div>
       </div>
-      <div class="time">23:42:17</div>
+      <div class="logo-text">Alchemy OS</div>
+    </div>
+    <div class="header-right">
+      <div class="phase-moon" id="moon">🌕</div>
+      <div class="time" id="clock">23:42:17</div>
     </div>
   </div>
 
-  <!-- VISUALIZER -->
+  <!-- VISUALIZER — The Scrying Mirror -->
   <div class="panel">
-    <div class="panel-title">Visualizer</div>
+    <div class="panel-corner tl"></div><div class="panel-corner tr"></div>
+    <div class="panel-corner bl"></div><div class="panel-corner br"></div>
+    <div class="panel-title"><span class="sigil">🔮</span> Scrying Mirror</div>
     <div class="viz-preview">
-      <div class="ring"></div>
-      <div class="ring"></div>
-      <div class="ring"></div>
-      <div class="center-dot"></div>
-      <div class="viz-label">MANDALA _4D // 60 FPS</div>
+      <div class="viz-mandala">
+        <div class="viz-ring" style="inset:-12px;"></div>
+        <div class="viz-ring" style="inset:-24px;"></div>
+      </div>
+      <div class="viz-label">◆ MANDALA OF FLAME ◆ 60 AEONS</div>
     </div>
   </div>
 
-  <!-- SEQUENCER -->
+  <!-- SEQUENCER — Alchemical Formula -->
   <div class="panel">
-    <div class="panel-title">Sequencer</div>
+    <div class="panel-corner tl"></div><div class="panel-corner tr"></div>
+    <div class="panel-corner bl"></div><div class="panel-corner br"></div>
+    <div class="panel-title"><span class="sigil">📜</span> Formula Scroll</div>
     <div class="seq-grid" id="seqGrid"></div>
-    <div class="bpm">120</div>
+    <div class="bpm">120 ♩</div>
     <div class="seq-bar">
-      <span>BAR 07/32</span>
-      <span>KICK SN HAT LD BS</span>
+      <span>PHASE 07 / 32</span>
+      <span>VERSE 03</span>
+    </div>
+    <div class="ingredients" style="font-size:11px;color:var(--parchment-dark);text-align:center;margin-top:4px;">
+      🜂 KICK &nbsp; 🜄 SNARE &nbsp; 🜁 HAT &nbsp; 🜃 BASS
     </div>
   </div>
 
-  <!-- ADIA -->
+  <!-- ADIA — The Homunculus -->
   <div class="panel">
-    <div class="panel-title">Adia Companion</div>
-    <div class="adia-eyes">
-      <div class="adia-eye"></div><div class="adia-eye"></div>
-      <div class="adia-eye"></div><div class="adia-eye"></div>
-      <div class="adia-eye"></div><div class="adia-eye"></div>
-      <div class="adia-eye"></div><div class="adia-eye"></div>
+    <div class="panel-corner tl"></div><div class="panel-corner tr"></div>
+    <div class="panel-corner bl"></div><div class="panel-corner br"></div>
+    <div class="panel-title"><span class="sigil">🧪</span> Homunculus — Adia</div>
+    <div class="adia-container">
+      <div class="flask" id="flask">
+        <div class="flask-liquid"></div>
+      </div>
     </div>
-    <div class="adia-status">&#9679; AWAKE // LLAMA3</div>
-    <div style="font-family:'Crimson Text',serif; color:var(--bone); font-size:13px; margin-top:8px; font-style:italic; text-align:center; opacity:0.7">
-      "Ready when you are, Dru."
+    <div class="adia-status">● VITAL // ELIXIR STABLE</div>
+    <div style="font-family:'IM Fell English',serif; color:var(--parchment-dark); font-style:italic; font-size:13px; text-align:center; margin-top:8px; opacity:0.8;">
+      "I am here, Alchemist. What shall we transmute?"
     </div>
   </div>
 
-  <!-- SHADERS -->
+  <!-- SHADER VAULT — Ingredient Cabinet -->
   <div class="panel">
-    <div class="panel-title">Shader Vault</div>
-    <div class="shader-icons">
-      <div class="shader-glyph">&#9678;</div>
-      <div class="shader-glyph">&#10023;</div>
-      <div class="shader-glyph">&#9688;</div>
-      <div class="shader-glyph">&#9689;</div>
-      <div class="shader-glyph">&#9672;</div>
-      <div class="shader-glyph">&#9731;</div>
-    </div>
+    <div class="panel-corner tl"></div><div class="panel-corner tr"></div>
+    <div class="panel-corner bl"></div><div class="panel-corner br"></div>
+    <div class="panel-title"><span class="sigil">🧴</span> Ingredient Cabinet</div>
+    <div class="ingredient-grid" id="jars"></div>
     <div class="shader-count">34</div>
-    <div style="font-family:'Space Mono',monospace; font-size:10px; color:var(--parchment); text-align:center;">
-      GLSL // WGSL // KODELIFE
+    <div style="font-family:'Courier Prime',monospace; font-size:10px; color:var(--parchment-darker); text-align:center;">
+      ESSENCES // TINCTURES // ELIXIRS
     </div>
   </div>
 
-  <!-- METRICS -->
+  <!-- METRICS — Apothecary Log -->
   <div class="panel">
-    <div class="panel-title">System Metrics</div>
+    <div class="panel-corner tl"></div><div class="panel-corner tr"></div>
+    <div class="panel-corner bl"></div><div class="panel-corner br"></div>
+    <div class="panel-title"><span class="sigil">⚖</span> Apothecary Log</div>
     <div class="metric-row">
-      <span class="metric-label">CPU</span>
-      <div class="metric-bar"><div class="metric-fill" style="width:45%;background:linear-gradient(90deg,var(--copper-oxide),var(--amber));"></div></div>
+      <span class="metric-symbol">🜂</span>
+      <div class="metric-bar"><div class="metric-fill" style="width:45%;background:linear-gradient(90deg,var(--gold-dim),var(--gold));"></div></div>
       <span class="metric-val">45%</span>
     </div>
     <div class="metric-row">
-      <span class="metric-label">GPU</span>
-      <div class="metric-bar"><div class="metric-fill" style="width:82%;background:linear-gradient(90deg,var(--amber),var(--rust));"></div></div>
+      <span class="metric-symbol">🜁</span>
+      <div class="metric-bar"><div class="metric-fill" style="width:82%;background:linear-gradient(90deg,var(--gold),var(--crimson-bright));"></div></div>
       <span class="metric-val">82%</span>
     </div>
     <div class="metric-row">
-      <span class="metric-label">RAM</span>
-      <div class="metric-bar"><div class="metric-fill" style="width:62%;background:linear-gradient(90deg,var(--copper-oxide),var(--amber));"></div></div>
+      <span class="metric-symbol">🜄</span>
+      <div class="metric-bar"><div class="metric-fill" style="width:62%;background:linear-gradient(90deg,var(--emerald),var(--gold-dim));"></div></div>
       <span class="metric-val">9.9/16</span>
     </div>
     <div class="metric-row">
-      <span class="metric-label">TEMP</span>
-      <div class="metric-bar"><div class="metric-fill" style="width:55%;background:linear-gradient(90deg,var(--copper-oxide),var(--amber));"></div></div>
-      <span class="metric-val">62°C</span>
-    </div>
-    <div class="metric-row">
-      <span class="metric-label">FPS</span>
-      <div class="metric-bar"><div class="metric-fill" style="width:100%;background:linear-gradient(90deg,var(--copper-oxide),var(--amber));"></div></div>
-      <span class="metric-val">60</span>
+      <span class="metric-symbol">🜃</span>
+      <div class="metric-bar"><div class="metric-fill" style="width:55%;background:linear-gradient(90deg,var(--copper),var(--crimson));"></div></div>
+      <span class="metric-val">62&deg;</span>
     </div>
   </div>
 
-  <!-- MESH PEERS -->
+  <!-- MESH — Celestial Constellation -->
   <div class="panel">
-    <div class="panel-title">Mesh Spine</div>
-    <div class="mesh-spine">
-      <div class="mesh-node">
-        <div class="mesh-node-dot"></div>
-        <span class="mesh-node-label">ALLY</span>
-      </div>
-      <div class="mesh-node">
-        <div class="mesh-node-dot"></div>
-        <span class="mesh-node-label">MINI</span>
-      </div>
-      <div class="mesh-node offline">
-        <div class="mesh-node-dot"></div>
-        <span class="mesh-node-label">PIXEL</span>
-      </div>
-      <div class="mesh-node">
-        <div class="mesh-node-dot"></div>
-        <span class="mesh-node-label">TAB</span>
-      </div>
-      <div class="mesh-node offline">
-        <div class="mesh-node-dot"></div>
-        <span class="mesh-node-label">NUU</span>
-      </div>
+    <div class="panel-corner tl"></div><div class="panel-corner tr"></div>
+    <div class="panel-corner bl"></div><div class="panel-corner br"></div>
+    <div class="panel-title"><span class="sigil">🜚</span> Celestial Constellation</div>
+    <div class="constellation">
+      <div class="constellation-line"></div>
+      <div class="star-node"><span class="star">★</span><span class="star-label">SOL</span></div>
+      <div class="star-node"><span class="star">★</span><span class="star-label">LUNA</span></div>
+      <div class="star-node dim"><span class="star">☆</span><span class="star-label">MARS</span></div>
+      <div class="star-node"><span class="star">★</span><span class="star-label">VENUS</span></div>
+      <div class="star-node dim"><span class="star">☆</span><span class="star-label">MERC</span></div>
     </div>
-    <div style="font-family:'Space Mono',monospace; font-size:9px; color:var(--parchment); text-align:center; margin-top:12px;">
-      &#9679; ONLINE &#9679; OFFLINE
+    <div style="font-family:'Courier Prime',monospace; font-size:9px; color:var(--parchment-darker); text-align:center; margin-top:12px;">
+      ★ ALIGNED &nbsp; ☆ OBSCURED
     </div>
   </div>
-
 </div>
 
-<!-- Scanlines -->
-<div class="scanlines"></div>
-
 <script>
-// Generate ember particles
-const embersContainer = document.getElementById('embers');
-for (let i = 0; i < 80; i++) {
-  const ember = document.createElement('div');
-  ember.className = 'ember';
-  ember.style.left = Math.random() * 100 + '%';
-  ember.style.bottom = '0px';
-  ember.style.setProperty('--drift', (Math.random() - 0.5) * 200 + 'px');
-  ember.style.animationDuration = (6 + Math.random() * 12) + 's';
-  ember.style.animationDelay = Math.random() * 10 + 's';
-  embersContainer.appendChild(ember);
+const jars = document.getElementById('jars');
+const colors = ['#b22222','#2d6a4f','#c9a84c','#4a0e4e','#d4853a','#5b9bd5','#8b1a1a','#40916c','#e8c854','#6b8e23','#b87333','#8a9597'];
+for (let i = 0; i < 12; i++) {
+  const jar = document.createElement('div');
+  jar.className = 'ingredient-jar';
+  jar.innerHTML = `<div class="jar-cork"></div><div class="jar-liquid" style="height:${30+Math.random()*15}px;background:${colors[i]};opacity:0.6;"></div>`;
+  jars.appendChild(jar);
 }
 
-// Generate sequencer grid
 const seqGrid = document.getElementById('seqGrid');
-const pattern = [
-  [1,0,0,0,1,0,0,0],
-  [0,0,1,0,0,0,1,0],
-  [1,1,0,0,1,0,0,0],
-  [0,0,0,1,0,0,1,0],
-];
-for (let row = 0; row < 4; row++) {
-  for (let col = 0; col < 8; col++) {
+const pattern = [[1,0,0,0,1,0,0,0],[0,0,1,0,0,0,1,0],[1,1,0,0,1,0,0,0],[0,0,0,1,0,0,1,0]];
+pattern.forEach(row => {
+  row.forEach(v => {
     const cell = document.createElement('div');
-    cell.className = 'seq-cell';
-    if (pattern[row][col] === 1) cell.classList.add('active');
-    else if (col === 3 || col === 7) cell.classList.add('accent');
+    cell.className = 'seq-cell' + (v?' active':'');
     seqGrid.appendChild(cell);
-  }
+  });
+});
+
+const flask = document.getElementById('flask');
+for (let i = 0; i < 6; i++) {
+  const b = document.createElement('div');
+  b.className = 'flask-bubble';
+  b.style.left = (10 + Math.random() * 60) + 'px';
+  b.style.bottom = (Math.random() * 40) + 'px';
+  b.style.animationDuration = (2 + Math.random() * 3) + 's';
+  b.style.animationDelay = Math.random() * 3 + 's';
+  flask.appendChild(b);
 }
 
-// Update time
+const moons = ['🌑','🌒','🌓','🌔','🌕','🌖','🌗','🌘'];
+let moonIdx = 4;
+setInterval(() => {
+  moonIdx = (moonIdx + 1) % 8;
+  document.getElementById('moon').textContent = moons[moonIdx];
+}, 2000);
+
 setInterval(() => {
   const d = new Date();
-  document.querySelector('.time').textContent = 
+  document.getElementById('clock').textContent = 
     d.getHours().toString().padStart(2,'0') + ':' +
     d.getMinutes().toString().padStart(2,'0') + ':' +
     d.getSeconds().toString().padStart(2,'0');
