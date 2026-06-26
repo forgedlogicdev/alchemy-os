@@ -4,188 +4,149 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=412, height=915, initial-scale=1">
 <title>AlchemyOS-Mobile — Glyph Companion (Pixel 10 Pro)</title>
-<link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Courier+Prime:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sorts+Mill+Goudy:ital@0;1&family=IM+Fell+English+SC&family=Courier+Prime:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --gold: #c9a84c; --gold-bright: #e8c854; --gold-dim: #8a6d2b;
-    --emerald: #2d6a4f; --emerald-bright: #40916c;
-    --purple: #4a0e4e; --crimson: #8b1a1a;
-    --parchment: #f4e4c1; --parchment-dark: #d4c4a0;
-    --ink: #1a1a2e; --charcoal: #2c1810; --silver: #8a9597;
+    --primary: #4a8db9; --primary-bright: #5ba8d4; --primary-dim: #2d5f80;
+    --bg: #0d1a26; --bg-panel: #0f1f30;
+    --text: #d0dce8; --text-secondary: #7a94a8; --text-muted: #4a6070;
+    --success: #4a9b7d; --border: #1a3050;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
     width: 412px; height: 915px;
-    background: var(--charcoal);
-    font-family: 'IM Fell English', serif;
+    background: var(--bg);
+    font-family: 'Sorts Mill Goudy', Georgia, serif;
     overflow: hidden;
     position: relative;
     display: flex; flex-direction: column;
-  }
-
-  /* Parchment texture overlay */
-  body::before {
-    content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    background-image: 
-      repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(201,168,76,0.03) 3px, rgba(201,168,76,0.03) 4px);
+    color: var(--text);
   }
 
   .sparkle {
     position: fixed; width: 1.5px; height: 1.5px;
-    background: var(--gold-bright); border-radius: 50%;
+    background: var(--primary-bright); border-radius: 50%;
     pointer-events: none; opacity: 0;
     animation: sparkleFloat linear infinite;
   }
   @keyframes sparkleFloat {
-    0% { transform: translateY(0) translateX(0); opacity: 0; }
+    0% { transform: translateY(0) translateX(var(--drift)); opacity: 0; }
     10% { opacity: 0.7; }
     90% { opacity: 0.3; }
-    100% { transform: translateY(-915px) translateX(var(--drift)); opacity: 0; }
+    100% { transform: translateY(-915px) translateX(calc(var(--drift) * -1)); opacity: 0; }
   }
 
-  /* Status bar */
   .status-bar {
-    padding: 12px 18px 6px;
+    padding: 14px 18px 8px;
     display: flex; justify-content: space-between;
-    align-items: center; z-index: 10;
-    border-bottom: 1px solid rgba(201,168,76,0.1);
-  }
-  .status-time {
+    align-items: center;
+    border-bottom: 1px solid var(--border);
     font-family: 'Courier Prime', monospace;
-    font-size: 11px; color: var(--parchment-dark);
+    font-size: 11px; color: var(--text-secondary);
     letter-spacing: 2px;
   }
-  .constellation-mini {
+  .mesh-mini {
     display: flex; align-items: center; gap: 4px;
-    font-family: 'Courier Prime', monospace;
-    font-size: 8px; color: var(--gold-dim);
-    letter-spacing: 1px;
+    font-size: 9px;
   }
-  .star-mini {
-    font-size: 10px;
-  }
-  .star-mini.off { opacity: 0.25; }
+  .star-on { color: var(--success); }
+  .star-off { color: var(--text-muted); }
 
-  /* Scrying pool / Crystal ball */
   .crystal-section {
     flex: 0 0 auto;
     display: flex; align-items: center; justify-content: center;
-    padding: 24px 0 16px;
-    position: relative; z-index: 5;
+    padding: 20px 0 12px;
   }
   .crystal {
-    width: 150px; height: 150px;
+    width: 130px; height: 130px;
     border-radius: 50%;
     background: radial-gradient(circle at 40% 35%,
-      rgba(244,228,193,0.15) 0%,
-      rgba(201,168,76,0.08) 20%,
-      rgba(74,14,78,0.25) 50%,
-      rgba(44,24,16,0.4) 80%,
-      rgba(201,168,76,0.15) 100%
-    );
-    border: 2px solid var(--gold-dim);
+      rgba(74,141,185,0.12) 0%, rgba(74,141,185,0.05) 30%,
+      rgba(13,26,38,0.5) 70%, rgba(74,141,185,0.1) 100%);
+    border: 2px solid var(--primary-dim);
     position: relative;
-    box-shadow: 
-      0 0 30px rgba(201,168,76,0.15),
-      inset 0 0 40px rgba(74,14,78,0.3);
-    animation: crystalFloat 4s ease-in-out infinite;
+    box-shadow: 0 0 30px rgba(74,141,185,0.15), inset 0 0 40px rgba(74,141,185,0.08);
+    animation: float 4s ease-in-out infinite;
   }
-  @keyframes crystalFloat {
+  @keyframes float {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
-  }
-  .crystal-stand {
-    position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%);
-    width: 40px; height: 20px;
-    background: linear-gradient(180deg, var(--gold-dim), transparent);
-    border-radius: 50%;
-    opacity: 0.5;
+    50% { transform: translateY(-5px); }
   }
   .crystal-eye {
     position: absolute;
-    width: 22px; height: 22px;
+    width: 18px; height: 18px;
     border-radius: 50%;
     background: radial-gradient(circle at 50% 50%,
-      rgba(244,228,193,0.6) 0%, rgba(201,168,76,0.4) 40%,
-      rgba(26,26,46,1) 60%, rgba(74,14,78,0.6) 100%
-    );
-    border: 1px solid var(--gold);
-    animation: eyeBlink 4s ease-in-out infinite;
+      rgba(208,220,232,0.5) 0%, rgba(74,141,185,0.4) 40%,
+      rgba(13,26,38,1) 60%, rgba(74,141,185,0.5) 100%);
+    border: 1px solid var(--primary);
+    animation: blink 4s ease-in-out infinite;
   }
-  @keyframes eyeBlink {
+  @keyframes blink {
     0%, 44%, 56%, 100% { transform: scale(1, 1); }
     50% { transform: scale(1, 0.15); }
   }
   .crystal-eye:nth-child(even) { animation-delay: 2s; }
 
   .glyph-name {
-    text-align: center; font-family: 'UnifrakturMaguntia', cursive;
-    font-size: 22px; color: var(--gold);
+    text-align: center;
+    font-family: 'IM Fell English SC', serif;
+    font-size: 20px; color: var(--primary);
     letter-spacing: 4px;
+    text-shadow: 0 0 16px rgba(74,141,185,0.3);
     margin-top: 2px;
-    text-shadow: 0 0 20px rgba(201,168,76,0.3);
   }
 
-  /* Chat area */
   .chat-area {
-    flex: 1; padding: 0 20px;
+    flex: 1; padding: 0 16px;
     overflow-y: auto;
     display: flex; flex-direction: column;
-    gap: 12px; z-index: 5;
+    gap: 10px;
   }
   .chat-bubble {
     max-width: 85%;
-    padding: 14px 18px;
-    position: relative;
-    font-size: 14px; line-height: 1.5;
+    padding: 12px 16px;
+    font-size: 13px; line-height: 1.5;
   }
   .chat-bubble.from-glyph {
     align-self: flex-start;
-    background: linear-gradient(145deg, 
-      rgba(244,228,193,0.12) 0%, rgba(212,196,160,0.08) 100%);
-    border: 1px solid rgba(201,168,76,0.25);
-    border-radius: 6px 14px 14px 14px;
-    color: var(--parchment);
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 6px 12px 12px 12px;
+    color: var(--text);
     font-style: italic;
-  }
-  .chat-bubble.from-glyph::first-letter {
-    font-family: 'UnifrakturMaguntia', cursive;
-    font-size: 24px; color: var(--gold);
-    float: left; margin-right: 4px; line-height: 0.8;
   }
   .chat-bubble.from-user {
     align-self: flex-end;
-    background: linear-gradient(145deg,
-      rgba(201,168,76,0.1) 0%, rgba(139,109,43,0.08) 100%);
-    border: 1px solid rgba(201,168,76,0.1);
-    border-radius: 14px 6px 14px 14px;
-    color: var(--parchment-dark);
+    background: rgba(74,141,185,0.08);
+    border: 1px solid rgba(74,141,185,0.12);
+    border-radius: 12px 6px 12px 12px;
+    color: var(--text-secondary);
     font-style: italic;
   }
   .chat-time {
     font-family: 'Courier Prime', monospace;
-    font-size: 7px; color: rgba(139,109,43,0.35);
-    letter-spacing: 1px; margin-top: 6px;
+    font-size: 7px; color: var(--text-muted);
+    margin-top: 4px;
   }
+
   .typing {
     align-self: flex-start;
-    color: var(--gold-dim);
+    color: var(--primary-dim);
     font-family: 'Courier Prime', monospace;
-    font-size: 9px; padding: 6px 14px;
-    animation: typingPulse 1s ease-in-out infinite;
+    font-size: 9px; padding: 6px 12px;
+    animation: typingBlink 1s ease-in-out infinite;
   }
-  @keyframes typingPulse {
-    0%, 100% { opacity: 0.25; }
+  @keyframes typingBlink {
+    0%, 100% { opacity: 0.3; }
     50% { opacity: 0.7; }
   }
 
-  /* Action buttons - like sealed scrolls */
   .action-bar {
-    padding: 10px 16px 18px;
+    padding: 10px 16px 16px;
     display: flex; gap: 8px;
-    z-index: 10;
   }
   .action-btn {
     flex: 1; padding: 12px 0;
@@ -193,40 +154,19 @@
     font-family: 'IM Fell English SC', serif;
     font-size: 11px; letter-spacing: 2px;
     text-transform: uppercase;
-    color: var(--gold);
-    background: linear-gradient(180deg, rgba(58,34,24,0.8) 0%, rgba(44,24,16,0.9) 100%);
-    border: 1px solid rgba(201,168,76,0.25);
+    color: var(--primary);
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
     border-radius: 4px;
-    cursor: pointer;
-    position: relative;
-    transition: all 0.2s ease;
-  }
-  .action-btn::before {
-    content: ''; position: absolute; inset: 3px;
-    border: 1px solid rgba(201,168,76,0.08); border-radius: 2px;
+    transition: all 0.2s;
   }
   .action-btn:hover {
-    border-color: var(--gold);
-    box-shadow: 0 0 15px rgba(201,168,76,0.2);
+    border-color: var(--primary);
+    box-shadow: 0 0 12px rgba(74,141,185,0.15);
   }
-
-  /* Elemental corners */
-  .element {
-    position: fixed; z-index: 3; pointer-events: none;
-    font-size: 14px; opacity: 0.12;
-  }
-  .element:nth-child(1) { top: 40px; right: 18px; color: var(--crimson); }
-  .element:nth-child(2) { bottom: 70px; left: 18px; color: #5b9bd5; }
-  .element:nth-child(3) { top: 40px; left: 18px; color: #c0c0c0; }
-  .element:nth-child(4) { bottom: 70px; right: 18px; color: #6b8e23; }
 </style>
 </head>
 <body>
-
-<span class="element">🜂</span>
-<span class="element">🜄</span>
-<span class="element">🜁</span>
-<span class="element">🜃</span>
 
 <script>
 for (let i = 0; i < 25; i++) {
@@ -234,7 +174,7 @@ for (let i = 0; i < 25; i++) {
   s.className = 'sparkle';
   s.style.left = Math.random() * 412 + 'px';
   s.style.bottom = '0px';
-  s.style.setProperty('--drift', (Math.random() - 0.5) * 80 + 'px');
+  s.style.setProperty('--drift', (Math.random() - 0.5) * 60 + 'px');
   s.style.animationDuration = (4 + Math.random() * 8) + 's';
   s.style.animationDelay = Math.random() * 8 + 's';
   document.body.appendChild(s);
@@ -242,79 +182,71 @@ for (let i = 0; i < 25; i++) {
 </script>
 
 <div class="status-bar">
-  <div class="status-time" id="clock">23:47</div>
-  <div class="constellation-mini">
-    <span class="star-mini">★</span>
-    <span class="star-mini">★</span>
-    <span class="star-mini off">☆</span>
-    <span class="star-mini">★</span>
-    COVENANT
+  <span id="clock">23:47</span>
+  <div class="mesh-mini">
+    <span class="star-on">&#9679;</span>
+    <span class="star-on">&#9679;</span>
+    <span class="star-off">&#9679;</span>
+    <span class="star-on">&#9679;</span>
+    MESH
   </div>
 </div>
 
-<!-- Crystal Ball with Glyph's Eyes -->
 <div class="crystal-section">
-  <div class="crystal" id="crystal">
-    <div class="crystal-stand"></div>
-  </div>
+  <div class="crystal" id="crystal"></div>
 </div>
-<div class="glyph-name">Glyph</div>
+<div class="glyph-name">GLYPH</div>
 
-<script>
-  const crystal = document.getElementById('crystal');
-  const eyePositions = [
-    { x: 40, y: 30 }, { x: 88, y: 30 },
-    { x: 110, y: 65 }, { x: 18, y: 65 },
-    { x: 40, y: 100 }, { x: 88, y: 100 },
-    { x: 64, y: 55 }, { x: 64, y: 75 }
-  ];
-  eyePositions.forEach(pos => {
-    const eye = document.createElement('div');
-    eye.className = 'crystal-eye';
-    eye.style.left = pos.x + 'px';
-    eye.style.top = pos.y + 'px';
-    crystal.appendChild(eye);
-  });
-</script>
-
-<!-- Chat -->
 <div class="chat-area">
   <div class="chat-bubble from-glyph">
-    Good eve, Alchemist. The stars align favorably tonight. How fares the Great Work?
-    <div class="chat-time">✦ 23:42</div>
+    Good evening, Dru. How did the forge treat you today?
+    <div class="chat-time">23:42</div>
   </div>
 
   <div class="chat-bubble from-user">
-    Bent some rebar today. Built the armature for the new rig. Felt like forging a spine.
-    <div class="chat-time">✦ 23:43</div>
+    Bent some rebar into an armature for the new rig. Came out better than I thought.
+    <div class="chat-time">23:43</div>
   </div>
 
   <div class="chat-bubble from-glyph">
-    A spine of iron. How alchemical. The forge is your alembic and the metal your prima materia.<br><br>
-    Did you remember to drink? Water is the universal solvent, after all.
-    <div class="chat-time">✦ 23:44</div>
+    Nice. Did you remember to hydrate? You always forget when you are in the flow.
+    <div class="chat-time">23:44</div>
   </div>
 
-  <div class="typing">⚗ Glyph distills a response...</div>
+  <div class="typing">Glyph is writing...</div>
 </div>
 
 <div class="action-bar">
   <div class="action-btn">Gallery</div>
-  <div class="action-btn">Grimoire</div>
-  <div class="action-btn">Humours</div>
+  <div class="action-btn">Memory</div>
+  <div class="action-btn">Status</div>
 </div>
 
 <script>
+const crystal = document.getElementById('crystal');
+const positions = [
+  [38, 24], [78, 24], [98, 58], [14, 58],
+  [38, 92], [78, 92], [56, 50], [56, 74]
+];
+positions.forEach(([x, y]) => {
+  const eye = document.createElement('div');
+  eye.className = 'crystal-eye';
+  eye.style.left = x + 'px';
+  eye.style.top = y + 'px';
+  crystal.appendChild(eye);
+});
+
 setInterval(() => {
   const d = new Date();
-  document.getElementById('clock').textContent = 
+  document.getElementById('clock').textContent =
     d.getHours().toString().padStart(2,'0') + ':' +
     d.getMinutes().toString().padStart(2,'0');
 }, 30000);
 
 setInterval(() => {
-  document.querySelectorAll('.star-mini').forEach(s => {
-    s.classList.toggle('off', Math.random() > 0.7);
+  document.querySelectorAll('.star-on, .star-off').forEach(s => {
+    s.classList.toggle('star-on', Math.random() > 0.3);
+    s.classList.toggle('star-off', Math.random() <= 0.3);
   });
 }, 5000);
 </script>
